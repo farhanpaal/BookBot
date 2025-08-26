@@ -159,7 +159,7 @@ async def give_filter(client, message):
         if total_results == 0:
             return
         else:
-            return await message.reply_text(f"<b>Hᴇʏ {message.from_user.mention}, {str(total_results)} ʀᴇsᴜʟᴛs ᴀʀᴇ ғᴏᴜɴᴅ ɪɴ ᴍʏ ᴅᴀᴛᴀʙᴀsᴇ ғᴏʀ ʏᴏᴜʀ ᴏ̨ᴜᴇʀʏ {search}. \n\nHᴇʀᴇ ᴀʀᴇ ᴏᴜᴛ Uᴘᴅᴀᴛᴇ Cʜᴀɴɴᴇʟs Dᴏ Jᴏɪɴ Tʜᴇᴍ Tᴏ Gᴇᴛ Lᴀᴛᴇsᴛ Uᴘᴅᴀᴛᴇs.\n\n Yᴏᴜ Cᴀɴ Aʟsᴏ Fɪɴᴅ Bᴏᴏᴋs Aɴᴅ Aᴜᴅɪᴏʙᴏᴏᴋs Tʜᴇʀᴇ - <a href='{CHNL_LNK}'>AudioBooks</a> <a href='{GRP_LNK}'>Books</a></b>")
+            return await message.reply_text(f"<b>Hᴇʏ {message.from_user.mention}, {str(total_results)} ʀᴇsᴜʟᴛs ᴀʀᴇ ғᴏᴜɴᴅ ɪɴ ᴍʏ ᴅᴀᴛᴀʙᴀsᴇ ғᴏʀ ʏᴏᴜʀ ᴏ̨ᴜᴇʀʏ {search}. \n\nHᴇʀᴇ ᴀʀᴇ ᴏᴜᴛ Uᴘᴅᴀᴛᴇ Cʜᴀɴɴᴇʟs Dᴏ Jᴏɪɴ Tʜᴇᴍ Tᴏ Gᴇᴛ Lᴀᴛᴇsᴛ Uᴘᴅᴀᴛᴇs.\n\n Yᴏᴜ Cᴀɴ Aʟsᴏ Fɪɴᴅ Bᴏᴏᴋs Aɴᴅ Aᴜᴅɪᴏʙᴏᴏᴋs Tʜᴇʀᴇ - <a href='{CHNL_LNK}'>Books Group</a> <a href='{GRP_LNK}'>Books</a></b>")
         
 
 @Client.on_message(filters.private & filters.text & filters.incoming)
