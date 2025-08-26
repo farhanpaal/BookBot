@@ -746,21 +746,4 @@ Example:- /set_caption 📕 File Name: {filename}
 
 
 
-@Client.on_message(filters.command("testdownload") & filters.user(ADMINS))
-async def test_download_log(client, message):
-    """Test if download logs work"""
-    if LOG_CHANNEL:
-        test_log = """
-📥 <b>Test Download Log</b>
 
-👤 <b>User:</b> Test User
-📖 <b>Book:</b> Test Book.pdf
-📦 <b>Size:</b> 5.2 MB
-⏰ <b>Time:</b> Now
-🔗 <b>Source:</b> Test Command
-        """
-        try:
-            await client.send_message(LOG_CHANNEL, test_log)
-            await message.reply("✅ Test log sent to channel!")
-        except Exception as e:
-            await message.reply(f"❌ Log failed: {e}")
