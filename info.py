@@ -13,7 +13,7 @@ BOT_TOKEN = environ.get('BOT_TOKEN', "8435207357:AAGSb5-t5s1gK75HCyZA1mOxgGw_P6N
 
 
 # This Pictures Is For Start Message Picture, You Can Add Multiple By Giving One Space Between Each.
-PICS = (environ.get('PICS', 'https://envs.sh/kz_.jpg')).split()
+PICS = (environ.get('PICS', 'https://envs.sh/t1x.png')).split()
 
 
 # Admins & Users
@@ -22,7 +22,7 @@ auth_users = [int(user) if id_pattern.search(user) else user for user in environ
 AUTH_USERS = (auth_users + ADMINS) if auth_users else []
 
 # This Channel Is For When User Start Your Bot Then Bot Send That User Name And Id In This Log Channel, Same For Group Also.
-LOG_CHANNEL = int(environ.get('LOG_CHANNEL', '-1002230949609'))
+LOG_CHANNEL = int(environ.get('LOG_CHANNEL', '-1002914604550'))
 
 # This Is File Channel Where You Upload Your File Then Bot Automatically Save It In Database
 CHANNELS = [int(ch) if id_pattern.search(ch) else ch for ch in environ.get('CHANNELS', '-1002613782189').split()]  # For Multiple Id Use One Space Between Each. (file channel)
