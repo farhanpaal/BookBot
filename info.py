@@ -36,7 +36,7 @@ TRY_AGAIN_BTN = bool(environ.get('TRY_AGAIN_BTN', False)) # Set True Or False (T
 AUTH_CHANNEL = [int(ch) for ch in environ.get('AUTH_CHANNEL', '-1001864718283').split() if id_pattern.match(ch)] #variableTribe
 
 # This Channel Is For When User Request Any File Name With command or hashtag like - /request or #request
-reqst_channel = environ.get('REQST_CHANNEL', '-1002062828970') #books discuss
+reqst_channel = environ.get('REQST_CHANNEL', '-1002819096574') #ebookfather req
 REQST_CHANNEL = int(reqst_channel) if reqst_channel and id_pattern.search(reqst_channel) else None
 
 # This Channel Is For Index Request
