@@ -6,9 +6,9 @@ id_pattern = re.compile(r'^.\d+$')
 
 # Bot information
 SESSION = environ.get('SESSION', 'ZahidBot')
-API_ID = int(environ.get('API_ID', ''))
-API_HASH = environ.get('API_HASH', '')
-BOT_TOKEN = environ.get('BOT_TOKEN', "")
+API_ID = int(environ.get('API_ID', '22498893'))
+API_HASH = environ.get('API_HASH', 'fed0fae4763accf081f5cf3d89862924')
+BOT_TOKEN = environ.get('BOT_TOKEN', "8435207357:AAGSb5-t5s1gK75HCyZA1mOxgGw_P6NXK-s")
 
 
 # This Pictures Is For Start Message Picture, You Can Add Multiple By Giving One Space Between Each.
@@ -16,56 +16,56 @@ PICS = (environ.get('PICS', 'https://envs.sh/kz_.jpg')).split()
 
 
 # Admins & Users
-ADMINS = [int(admin) if id_pattern.search(admin) else admin for admin in environ.get('ADMINS', '1178233430 1160901162 6748739525').split()] # For Multiple Id Use One Space Between Each.
-auth_users = [int(user) if id_pattern.search(user) else user for user in environ.get('AUTH_USERS', '1178233430 1160901162 6748739525').split()]  # For Multiple Id Use One Space Between Each.
+ADMINS = [int(admin) if id_pattern.search(admin) else admin for admin in environ.get('ADMINS', '1160901162 6748739525').split()] # For Multiple Id Use One Space Between Each. variable sildier
+auth_users = [int(user) if id_pattern.search(user) else user for user in environ.get('AUTH_USERS', '1160901162 6748739525').split()]  # For Multiple Id Use One Space Between Each.
 AUTH_USERS = (auth_users + ADMINS) if auth_users else []
 
 # This Channel Is For When User Start Your Bot Then Bot Send That User Name And Id In This Log Channel, Same For Group Also.
 LOG_CHANNEL = int(environ.get('LOG_CHANNEL', '-1002230949609'))
 
 # This Is File Channel Where You Upload Your File Then Bot Automatically Save It In Database
-CHANNELS = [int(ch) if id_pattern.search(ch) else ch for ch in environ.get('CHANNELS', '-1002509332985').split()]  # For Multiple Id Use One Space Between Each.
+CHANNELS = [int(ch) if id_pattern.search(ch) else ch for ch in environ.get('CHANNELS', '-1002613782189').split()]  # For Multiple Id Use One Space Between Each. (file channel)
 
 # auth_channel means force subscribe channel.
 # if REQUEST_TO_JOIN_MODE is true then force subscribe work like request to join fsub, else if false then work like normal fsub.
 REQUEST_TO_JOIN_MODE = bool(environ.get('REQUEST_TO_JOIN_MODE', False)) # Set True Or False
 TRY_AGAIN_BTN = bool(environ.get('TRY_AGAIN_BTN', False)) # Set True Or False (This try again button is only for request to join fsub not for normal fsub)
 
-# -1001864718283 -1002065254823
-AUTH_CHANNEL = [int(ch) for ch in environ.get('AUTH_CHANNEL', '-1001864718283 -1002065254823').split() if id_pattern.match(ch)]
+# -1002613782189 
+AUTH_CHANNEL = [int(ch) for ch in environ.get('AUTH_CHANNEL', '-1002613782189').split() if id_pattern.match(ch)] #variableTribe
 
 # This Channel Is For When User Request Any File Name With command or hashtag like - /request or #request
-reqst_channel = environ.get('REQST_CHANNEL', '-1002449998220')
+reqst_channel = environ.get('REQST_CHANNEL', '-1002062828970') #books discuss
 REQST_CHANNEL = int(reqst_channel) if reqst_channel and id_pattern.search(reqst_channel) else None
 
 # This Channel Is For Index Request
 INDEX_REQ_CHANNEL = int(environ.get('INDEX_REQ_CHANNEL', LOG_CHANNEL))
 
 # This Is Your Bot Support Group Id , Here Bot Will Not Give File Because This Is Support Group.
-support_chat_id = environ.get('SUPPORT_CHAT_ID', '-1002449998220')
+support_chat_id = environ.get('SUPPORT_CHAT_ID', '-1002062828970') #book discuss
 SUPPORT_CHAT_ID = int(support_chat_id) if support_chat_id and id_pattern.search(support_chat_id) else None
 
 # This Channel Is For /batch command file store.
-FILE_STORE_CHANNEL = [int(ch) for ch in (environ.get('FILE_STORE_CHANNEL', '-1002509332985')).split()]  # For Multiple Id Use One Space Between Each.
+FILE_STORE_CHANNEL = [int(ch) for ch in (environ.get('FILE_STORE_CHANNEL', '-1002613782189')).split()]  # For Multiple Id Use One Space Between Each. (file channel)
 
-DB_CHANNEL = int(environ.get("DB_CHANNEL", "-1002509332985")) 
-SECONDARY_DB_CHANNEL = int(environ.get("SECONDARY_DB_CHANNEL", "-1002141494142")) #file chaneel 
+DB_CHANNEL = int(environ.get("DB_CHANNEL", "-1002613782189"))  #(file channel)
+SECONDARY_DB_CHANNEL = int(environ.get("SECONDARY_DB_CHANNEL", "-1002613782189")) #(file channel)
 AUTO_DELETE_TIME = int(environ.get("AUTO_DELETE_TIME", "120")) # Time in Seconds
 AUTO_DELETE_MIN = int(environ.get("AUTO_DELETE_MIN", "2")) # Time in Minutes
 
 # Website Info:
 WEBSITE_URL_MODE = bool(environ.get('WEBSITE_URL_MODE', True)) # Set True or False
 # If Website Url Mode Is True Then Fill All Required Variable, If False Then Don't Fill.
-WEBSITE_URL = environ.get("WEBSITE_URL", "https://wisionx.42web.io") # For More Information Check Video On Yt -
+WEBSITE_URL = environ.get("WEBSITE_URL", "https://wisionx.42web.io") # For More Information Check Video On Yt - 🔴
 
 # This Channel Is For Delete Index File, Forward Your File In This Channel Which You Want To Delete Then Bot Automatically Delete That File From Database.
 DELETE_CHANNELS = [int(dch) if id_pattern.search(dch) else dch for dch in environ.get('DELETE_CHANNELS', '0').split()]  # For Multiple Id Use One Space Between Each.
 
 
 # MongoDB information
-DATABASE_URI = environ.get('DATABASE_URI', "mongodb+srv://ZahidNazir:ZahidNazir@1stcluster.1p0dlne.mongodb.net/?retryWrites=true&w=majority&appName=1stcluster")   # IF Multiple Database Is False Then Fill Only This Database Url.
-DATABASE_NAME = environ.get('DATABASE_NAME', "WisionXbot")
-COLLECTION_NAME = environ.get('COLLECTION_NAME', 'WisionXCollections')
+DATABASE_URI = environ.get('DATABASE_URI', "mongodb+srv://farhanpaal:farhaniscute12345@cluster0.bjafksk.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")   # IF Multiple Database Is False Then Fill Only This Database Url.
+DATABASE_NAME = environ.get('DATABASE_NAME', "Ebookfatherbot")
+COLLECTION_NAME = environ.get('COLLECTION_NAME', 'ebookFatherCollections')
 
 MULTIPLE_DATABASE = bool(environ.get('MULTIPLE_DATABASE', False)) # Set True or False
 
@@ -96,9 +96,9 @@ PUBLIC_FILE_CHANNEL = environ.get('PUBLIC_FILE_CHANNEL', '') # Public Channel Us
 
 # Links
 GRP_LNK = environ.get('GRP_LNK', 'https://t.me/selfimprovementbooks1')
-CHNL_LNK = environ.get('CHNL_LNK', 'https://t.me/Self_Improvement_Audiobooks')
-SUPPORT_CHAT = environ.get('SUPPORT_CHAT', 'Self_Improvement_AudioBook_Bot') # Support Chat Link Without https:// or @
-OWNER_LNK = environ.get('OWNER_LNK', 'https://t.me/Self_Improvement_AudioBook_Bot')
+CHNL_LNK = environ.get('CHNL_LNK', 'https://t.me/variabletribe')
+SUPPORT_CHAT = environ.get('SUPPORT_CHAT', 'https://t.me/booksdiscuss') # Support Chat Link Without https:// or @
+OWNER_LNK = environ.get('OWNER_LNK', 'https://t.me/variablesupport')
 
 # True Or False
 AI_SPELL_CHECK = bool(environ.get('AI_SPELL_CHECK', True))
