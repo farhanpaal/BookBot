@@ -19,20 +19,20 @@ from aiohttp import web
 from plugins import web_server
 from plugins.clone import restart_bots
 
-from Zahid.bot import ZahidBot
-from Zahid.util.keepalive import ping_server
-from Zahid.bot.clients import initialize_clients
+from Farhan.bot import farhanPaalBot
+from Farhan.util.keepalive import ping_server
+from Farhan.bot.clients import initialize_clients
 
 ppath = "plugins/*.py"
 files = glob.glob(ppath)
-ZahidBot.start()
+farhanPaalBot.start()
 loop = asyncio.get_event_loop()
 
 
 async def start():
     print('\n')
     print('Initalizing Your Bot')
-    bot_info = await ZahidBot.get_me()
+    bot_info = await farhanPaalBot.get_me()
     await initialize_clients()
     for name in files:
         with open(name) as a:
@@ -50,8 +50,8 @@ async def start():
     b_users, b_chats = await db.get_banned()
     temp.BANNED_USERS = b_users
     temp.BANNED_CHATS = b_chats
-    me = await ZahidBot.get_me()
-    temp.BOT = ZahidBot
+    me = await farhanPaalBot.get_me()
+    temp.BOT = farhanPaalBot
     temp.ME = me.id
     temp.U_NAME = me.username
     temp.B_NAME = me.first_name
@@ -62,7 +62,7 @@ async def start():
     time = now.strftime("%H:%M:%S %p")
 
     try:
-        await ZahidBot.send_message(chat_id=LOG_CHANNEL, text=script.RESTART_TXT.format(today, time))
+        await farhanPaalBot.send_message(chat_id=LOG_CHANNEL, text=script.RESTART_TXT.format(today, time))
     except:
         print("Make Your Bot Admin In Log Channel With Full Rights")
         

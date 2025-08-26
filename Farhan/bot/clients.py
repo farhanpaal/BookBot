@@ -4,12 +4,12 @@ import asyncio
 import logging
 from info import *
 from pyrogram import Client
-from Zahid.util.config_parser import TokenParser
-from Zahid.bot import multi_clients, work_loads, ZahidBot
+from Farhan.util.config_parser import TokenParser
+from Farhan.bot import multi_clients, work_loads, farhanPaalBot
 
 
 async def initialize_clients():
-    multi_clients[0] = ZahidBot
+    multi_clients[0] = farhanPaalBot
     work_loads[0] = 0
     all_tokens = TokenParser().parse_from_env()
     if not all_tokens:

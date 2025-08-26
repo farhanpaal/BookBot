@@ -1,7 +1,7 @@
 
 
 class script(object):
-    START_TXT = """<b><blockquote>𝐆𝐫𝐞𝐞𝐭𝐢𝐧𝐠𝐬 {} 👋Wᴇʟᴇᴄᴏᴍᴇ ᴛᴏ Tʜᴇ WɪsɪᴏɴX Aʀᴄʜɪᴠᴇ,Oɴ ᴅᴇᴍᴀɴᴅ ʟɪʙʀᴀʀʏ ɪɴ ᴡʜᴏʟᴇ Tᴇʟᴇɢʀᴀᴍ </blockquote>
+    START_TXT = """<b><blockquote>𝐆𝐫𝐞𝐞𝐭𝐢𝐧𝐠𝐬 {} 👋Wᴇʟᴇᴄᴏᴍᴇ ᴛᴏ Tʜᴇ ebookFatherBot Aʀᴄʜɪᴠᴇ,Oɴ ᴅᴇᴍᴀɴᴅ ʟɪʙʀᴀʀʏ ɪɴ ᴡʜᴏʟᴇ Tᴇʟᴇɢʀᴀᴍ </blockquote>
     
 📚 Tᴏ ᴅᴏᴡɴʟᴏᴀᴅ ᴀɴʏ ʙᴏᴏᴋ, sɪᴍᴘʟʏ ᴛʏᴘᴇ ᴛʜᴇ ɴᴀᴍᴇ ᴏғ ᴛʜᴇ ʙᴏᴏᴋ ʜᴇʀᴇ. Oᴜʀ ʙᴏᴛ ᴡɪʟʟ ғɪɴᴅ ɪᴛ ғᴏʀ ʏᴏᴜ ɪɴsᴛᴀɴᴛʟʏ!</b>"""
 
@@ -22,7 +22,7 @@ I Cᴀɴ Pʀᴏᴠɪᴅᴇ Yᴏᴜ Wɪᴛʜ Tʜᴇ Bᴏᴏᴋs,Aᴜᴅɪᴏᴏ�
 ‣ ʟᴀɴɢᴜᴀɢᴇ : <a href='https://www.python.org/download/releases/3.0/'>ᴘʏᴛʜᴏɴ 3</a> 
 ‣ ᴅᴀᴛᴀ ʙᴀsᴇ : <a href='https://www.mongodb.com/'>ᴍᴏɴɢᴏ ᴅʙ</a> 
 ‣ ʙᴏᴛ sᴇʀᴠᴇʀ : <a href='https://heroku.com'>ʜᴇʀᴏᴋᴜ</a> 
-‣ ʙᴜɪʟᴅ sᴛᴀᴛᴜs : ᴠ1.0 Stable By Tactition </b>"""
+‣ ʙᴜɪʟᴅ sᴛᴀᴛᴜs : ᴠ1.0 Stable By Farhan </b>"""
 
     CLONE_ABOUT_TXT = """<b><blockquote>⍟───[ ᴍʏ ᴀʙᴏᴜᴛ ]───⍟</blockquote>
     
@@ -32,7 +32,7 @@ I Cᴀɴ Pʀᴏᴠɪᴅᴇ Yᴏᴜ Wɪᴛʜ Tʜᴇ Bᴏᴏᴋs,Aᴜᴅɪᴏᴏ�
 ‣ ʟɪʙʀᴀʀʏ : <a href='https://docs.pyrogram.org/'>ᴘʏʀᴏɢʀᴀᴍ</a> 
 ‣ ʟᴀɴɢᴜᴀɢᴇ : <a href='https://www.python.org/download/releases/3.0/'>ᴘʏᴛʜᴏɴ 3</a> 
 ‣ ᴅᴀᴛᴀ ʙᴀsᴇ : <a href='https://www.mongodb.com/'>ᴍᴏɴɢᴏ ᴅʙ</a> 
-‣ ʙᴜɪʟᴅ sᴛᴀᴛᴜs : ᴠ1.0 Stable By @tactition></b>"""
+‣ ʙᴜɪʟᴅ sᴛᴀᴛᴜs : ᴠ1.0 Stable By @iamvariable></b>"""
 
     CLONE_TXT = """<b>🌟 <u>CLONE MODE</u>
 
@@ -176,12 +176,12 @@ OTHER DB :-
 ★ Usᴇᴅ Sᴛᴏʀᴀɢᴇ: <code>{} MB</code>
 ★ Fʀᴇᴇ Sᴛᴏʀᴀɢᴇ: <code>{} MB</code></b>"""
     
-    LOG_TEXT_G = """Boss New Group Added To WisionX Database 🔥
+    LOG_TEXT_G = """Boss New Group Added To ebookFather Database 🔥
 Gʀᴏᴜᴘ = {}(<code>{}</code>)
 Tᴏᴛᴀʟ Mᴇᴍʙᴇʀs = <code>{}</code>
 Aᴅᴅᴇᴅ Bʏ - {}"""
 
-    LOG_TEXT_P = """New User Added To WisionX Database 🔥
+    LOG_TEXT_P = """New User Added To ebookFather Database 🔥
 ID - <code>{}</code>
 Nᴀᴍᴇ - {}"""
 
@@ -458,14 +458,14 @@ Aᴠᴀɪʟᴀʙʟᴇ ᴄᴏᴍᴍᴀɴᴅs:
 
  
     RESTART_TXT = """
-<b>WisionX Books Bᴏᴛ Rᴇsᴛᴀʀᴛᴇᴅ !
+<b>ebookFatherBot Books Bᴏᴛ Rᴇsᴛᴀʀᴛᴇᴅ !
 
 📅 Dᴀᴛᴇ : <code>{}</code>
 ⏰ Tɪᴍᴇ : <code>{}</code>
 🌐 Tɪᴍᴇᴢᴏɴᴇ : <code>Asia/Kolkata</code>
-🛠️ Bᴜɪʟᴅ Sᴛᴀᴛᴜs: <code>v1.0 [ Sᴛᴀʙʟᴇ ] By Tactition</code></b>"""
+🛠️ Bᴜɪʟᴅ Sᴛᴀᴛᴜs: <code>v1.0 [ Sᴛᴀʙʟᴇ ] By Variable</code></b>"""
 
-    LOGO = """ Bot Started By Tactition..."""
+    LOGO = """ Bot Started By variable..."""
  
     TAMIL_INFO = """
 ஏய் <a href='tg://settings'>ᴍʏ ғʀɪᴇɴᴅ</a> 

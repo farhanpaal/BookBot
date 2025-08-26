@@ -20,7 +20,7 @@ from database.users_chats_db import db
 from json import JSONDecodeError
 import base64
 from utils import get_settings, pub_is_subscribed, get_size, is_subscribed, save_group_settings, temp, verify_user, check_token, check_verification, get_token, get_shortlink, get_tutorial, get_seconds
-from Zahid.util.file_properties import get_name, get_hash, get_media_file_size
+from Farhan.util.file_properties import get_name, get_hash, get_media_file_size
 from database.ia_filterdb import save_file
 
 logger = logging.getLogger(__name__)

@@ -7,7 +7,7 @@ from typing import Union, Optional, AsyncGenerator
 from aiohttp import web
 
 
-class ZahidXBot(Client):
+class FarhanXBot(Client):
 
     def __init__(self):
         super().__init__(
@@ -62,7 +62,7 @@ class ZahidXBot(Client):
                 yield message
                 current += 1
       
-ZahidBot = ZahidXBot()
+farhanPaalBot = FarhanXBot()
 
 multi_clients = {}
 work_loads = {}

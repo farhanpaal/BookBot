@@ -4,12 +4,12 @@ import re, math, logging, secrets, mimetypes, time
 from info import *
 from aiohttp import web
 from aiohttp.http_exceptions import BadStatusLine
-from Zahid.bot import multi_clients, work_loads, ZahidXBot
-from Zahid.server.exceptions import FIleNotFound, InvalidHash
-from Zahid import StartTime, __version__
-from Zahid.util.custom_dl import ByteStreamer
-from Zahid.util.time_format import get_readable_time
-from Zahid.util.render_template import render_page
+from Farhan.bot import multi_clients, work_loads, farhanPaalBot
+from Farhan.server.exceptions import FIleNotFound, InvalidHash
+from Farhan import StartTime, __version__
+from Farhan.util.custom_dl import ByteStreamer
+from Farhan.util.time_format import get_readable_time
+from Farhan.util.render_template import render_page
 
 routes = web.RouteTableDef()
 

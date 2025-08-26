@@ -1,12 +1,12 @@
 <p align="center">
-  <img src="https://camo.githubusercontent.com/3182669c1cffde4a5f4b429b7693fddbdfac8e454ab9a381978652d2fe89cd28/68747470733a2f2f696d672e6672656570696b2e636f6d2f7072656d69756d2d70686f746f2f6d616e2d737569742d69732d706c6179696e672d63686573735f313037323133382d3232373037302e6a70673f773d383236" alt="Tactition-Filter-Bot Logo">
+  <img src="https://camo.githubusercontent.com/3182669c1cffde4a5f4b429b7693fddbdfac8e454ab9a381978652d2fe89cd28/68747470733a2f2f696d672e6672656570696b2e636f6d2f7072656d69756d2d70686f746f2f6d616e2d737569742d69732d706c6179696e672d63686573735f313037323133382d3232373037302e6a70673f773d383236" alt="FarhanPaal-Filter-Bot Logo">
 </p>
 <h1 align="center">
-  TACTITION FILTER BOT
+  FarhanPaal FILTER BOT
 </h1>
 
 <p align="center">
-  <img src="https://readme-typing-svg.herokuapp.com/?lines=Welcome+To+Tactition+Filter+Bot!" alt="Typing SVG">
+  <img src="https://readme-typing-svg.herokuapp.com/?lines=Welcome+To+FarhanPaal+Filter+Bot!" alt="Typing SVG">
 </p>
 
 ## ✨ Main Features
@@ -42,7 +42,7 @@
 
 > **Note**: You can turn on or off every feature. Just use the features you want by turning them on.
 
-Join my [Update Channel](https://telegram.dog/tactition) for more updates regarding this repo.
+Join my [Update Channel](https://telegram.dog/iamvariable) for more updates regarding this repo.
 
 ### 📹 How To Deploy: [Video Tutorial](https://youtu.be/3SJR7vH2kRo)
 
@@ -203,7 +203,7 @@ python3 bot.py
 
 ## 📞 Contact
 
-[![Contact Developer](https://img.shields.io/static/v1?label=Contact+Developer&message=On+Telegram&color=critical)](https://telegram.me/Tactition)
+[![Contact Developer](https://img.shields.io/static/v1?label=Contact+Developer&message=On+Telegram&color=critical)](https://telegram.me/iamvariable)
 
 Feel free to fork the repo and edit as per your needs.
 
