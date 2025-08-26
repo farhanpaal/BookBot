@@ -26,7 +26,7 @@ async def auto_approve(client, message: ChatJoinRequest):
         chat = message.chat 
         user = message.from_user  
         await client.approve_chat_join_request(chat_id=chat.id, user_id=user.id)
-        text = f"<b>ʜᴇʟʟᴏ {message.from_user.mention} 👋,\n\nʏᴏᴜʀ ʀᴇǫᴜᴇsᴛ ᴛᴏ ᴊᴏɪɴ {message.chat.title} ɪs ᴀᴘᴘʀᴏᴠᴇᴅ.\n\nᴘᴏᴡᴇʀᴇᴅ ʙʏ - <a href='{CHNL_LNK}'>Tactition</a> & <a href='{GRP_LNK}'>Variable</a>"
+        text = f"<b>ʜᴇʟʟᴏ {message.from_user.mention} 👋,\n\nʏᴏᴜʀ ʀᴇǫᴜᴇsᴛ ᴛᴏ ᴊᴏɪɴ {message.chat.title} ɪs ᴀᴘᴘʀᴏᴠᴇᴅ.\n\n𝗣𝗼𝘄𝗲𝗿𝗲𝗱 𝗕𝘆 - <a href='{CHNL_LNK}'>Variable Tribe</a>"
         await client.send_message(chat_id=user.id, text=text)
          
     if REQUEST_TO_JOIN_MODE == False:

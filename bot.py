@@ -44,7 +44,7 @@ async def start():
             load = importlib.util.module_from_spec(spec)
             spec.loader.exec_module(load)
             sys.modules["plugins." + plugin_name] = load
-            print("Tactition Imported => " + plugin_name)
+            print("VARIABLE Imported => " + plugin_name)
     
     asyncio.create_task(ping_server())
     b_users, b_chats = await db.get_banned()

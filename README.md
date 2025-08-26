@@ -197,7 +197,7 @@ python3 bot.py
 
 ## 🙏 Credits
 - Thanks to [Pyrogram Library](https://github.com/pyrogram/pyrogram) & [Pyrofork Library](https://github.com/Mayuri-Chan/pyrofork)
-- Thanks to [Tactition](https://telegram.dog/tactition) for creating and maintaining this repo
+- Thanks to [Variable](https://telegram.dog/variablesupport) for creating and maintaining this repo
 - Thanks to [Eva Marie](https://t.me/TeamEvamaria) for the base repo
 - Thanks to everyone who contributed to this project
 
