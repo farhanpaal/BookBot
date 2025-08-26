@@ -3,12 +3,12 @@ import asyncio
 import logging
 from info import *
 from typing import Dict, Union
-from Zahid.bot import work_loads
+from Farhan.bot import work_loads
 from pyrogram import Client, utils, raw
-from Zahid.util.file_properties import get_file_ids
+from Farhan.util.file_properties import get_file_ids
 from pyrogram.session import Session, Auth
 from pyrogram.errors import AuthBytesInvalid
-from Zahid.server.exceptions import FIleNotFound
+from Farhan.server.exceptions import FIleNotFound
 from pyrogram.file_id import FileId, FileType, ThumbnailSource
 
 

@@ -1,17 +1,17 @@
 import jinja2
 from info import *
-from Zahid.bot import ZahidBot
-from Zahid.util.human_readable import humanbytes
-from Zahid.util.file_properties import get_file_ids
-from Zahid.server.exceptions import InvalidHash
+from Farhan.bot import farhanPaalBot
+from Farhan.util.human_readable import humanbytes
+from Farhan.util.file_properties import get_file_ids
+from Farhan.server.exceptions import InvalidHash
 import urllib.parse
 import logging
 import aiohttp
 
 
 async def render_page(id, secure_hash, src=None):
-    file = await ZahidBot.get_messages(int(LOG_CHANNEL), int(id))
-    file_data = await get_file_ids(ZahidBot, int(LOG_CHANNEL), int(id))
+    file = await farhanPaalBot.get_messages(int(LOG_CHANNEL), int(id))
+    file_data = await get_file_ids(farhanPaalBot, int(LOG_CHANNEL), int(id))
     if file_data.unique_id[:6] != secure_hash:
         logging.debug(f"link hash: {secure_hash} - {file_data.unique_id[:6]}")
         logging.debug(f"Invalid hash for message with - ID {id}")
@@ -26,15 +26,15 @@ async def render_page(id, secure_hash, src=None):
     file_size = humanbytes(file_data.file_size)
 
     if file_data.mime_type == "application/pdf":
-        template_file = "Zahid/template/pdf.html"
+        template_file = "Farhan/template/pdf.html"
     elif tag in ["video", "audio"]:
-        template_file = "Zahid/template/req.html"
+        template_file = "Farhan/template/req.html"
     elif file_data.mime_type in ["application/epub", "application/epub+zip"]:
-        template_file = "Zahid/template/epub.html"    
+        template_file = "Farhan/template/epub.html"    
     elif file_data.mime_type == "application/epub":
-        template_file = "Zahid/template/epub.html"    
+        template_file = "Farhan/template/epub.html"    
     else:
-        template_file = "Zahid/template/dl.html"
+        template_file = "Farhan/template/dl.html"
         
         async with aiohttp.ClientSession() as s:
             async with s.get(src) as u:
