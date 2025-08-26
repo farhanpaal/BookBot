@@ -97,7 +97,7 @@ async def gen_link_s(bot, message):
         
         tg_link    = f"https://t.me/{username}?start={outstr}"
         if WEBSITE_URL_MODE:
-            web_link = f"{WEBSITE_URL}?wisionx={outstr}"
+            web_link = f"{WEBSITE_URL}?variabletribe={outstr}"
             # Send both links
             await message.reply_text(
                 "**Here's Your Share Links:**\n"

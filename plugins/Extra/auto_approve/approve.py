@@ -65,7 +65,7 @@ async def auto_approve(client, message: ChatJoinRequest):
             if PREMIUM_AND_REFERAL_MODE == True:
                 buttons = [
                     [
-                    InlineKeyboardButton('Vɪsɪᴛ WɪsɪᴏɴX.ᴄᴏᴍ', web_app=WebAppInfo(url="https://wisionx.com"))
+                    InlineKeyboardButton('Vɪsɪᴛ WɪsɪᴏɴX.ᴄᴏᴍ', web_app=WebAppInfo(url="https://variabletribe.com"))
                     ],
                 [
                     InlineKeyboardButton('Aᴜᴅɪᴏʙᴏᴏᴋs Cʜᴀɴɴᴇʟ', url=CHNL_LNK),
@@ -80,7 +80,7 @@ async def auto_approve(client, message: ChatJoinRequest):
             else:
                 buttons = [
                     [
-                    InlineKeyboardButton('Vɪsɪᴛ WɪsɪᴏɴX.ᴄᴏᴍ', web_app=WebAppInfo(url="https://wisionx.com"))
+                    InlineKeyboardButton('Vɪsɪᴛ WɪsɪᴏɴX.ᴄᴏᴍ', web_app=WebAppInfo(url="https://variabletribe.com"))
                     ]
                 ,[
                     # InlineKeyboardButton('ᴇᴀʀɴ ᴍᴏɴᴇʏ', callback_data="shortlink_info"),

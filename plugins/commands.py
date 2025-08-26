@@ -40,7 +40,7 @@ async def start(client, message):
         # ],
 
         [
-            InlineKeyboardButton('Vɪsɪᴛ WɪsɪᴏɴX.ᴄᴏᴍ', web_app=WebAppInfo(url="https://wisionx.com"))
+            InlineKeyboardButton('Vɪsɪᴛ WɪsɪᴏɴX.ᴄᴏᴍ', web_app=WebAppInfo(url="https://variabletribe.com"))
         ],
         [
             InlineKeyboardButton('sᴜᴘᴘᴏʀᴛ ɢʀᴏᴜᴘ', url=f'https://t.me/{SUPPORT_CHAT}'),
@@ -65,7 +65,7 @@ async def start(client, message):
         if PREMIUM_AND_REFERAL_MODE == True:
             buttons = [
             [
-            InlineKeyboardButton('Vɪsɪᴛ WɪsɪᴏɴX.ᴄᴏᴍ', web_app=WebAppInfo(url="https://wisionx.com"))
+            InlineKeyboardButton('Vɪsɪᴛ WɪsɪᴏɴX.ᴄᴏᴍ', web_app=WebAppInfo(url="https://variabletribe.com"))
             ],
             [
                 InlineKeyboardButton('Aᴜᴅɪᴏʙᴏᴏᴋs Cʜᴀɴɴᴇʟʟ', url=CHNL_LNK),
@@ -87,7 +87,7 @@ async def start(client, message):
         else:
             buttons = [
             [
-            InlineKeyboardButton('Vɪsɪᴛ WɪsɪᴏɴX.ᴄᴏᴍ', web_app=WebAppInfo(url="https://wisionx.com"))
+            InlineKeyboardButton('Vɪsɪᴛ variabletribe.ᴄᴏᴍ', web_app=WebAppInfo(url="https://variabletribe.com"))
             ],
 
             [
@@ -325,7 +325,7 @@ async def start(client, message):
         if PREMIUM_AND_REFERAL_MODE == True:
             buttons = [
             [
-            InlineKeyboardButton('Vɪsɪᴛ WɪsɪᴏɴX.ᴄᴏᴍ', web_app=WebAppInfo(url="https://wisionx.com"))
+            InlineKeyboardButton('Vɪsɪᴛ WɪsɪᴏɴX.ᴄᴏᴍ', web_app=WebAppInfo(url="https://variabletribe.com"))
             ],
             [
                 InlineKeyboardButton('Aᴜᴅɪᴏʙᴏᴏᴋs Cʜᴀɴɴᴇʟʟ', url=CHNL_LNK),
@@ -347,7 +347,7 @@ async def start(client, message):
         else:
             buttons = [
               [
-            InlineKeyboardButton('Vɪsɪᴛ WɪsɪᴏɴX.ᴄᴏᴍ', web_app=WebAppInfo(url="https://wisionx.com"))
+            InlineKeyboardButton('Vɪsɪᴛ WɪsɪᴏɴX.ᴄᴏᴍ', web_app=WebAppInfo(url="https://variabletribe.com"))
             ],    
             [
                 InlineKeyboardButton('Aᴜᴅɪᴏʙᴏᴏᴋs Cʜᴀɴɴᴇʟʟ', url=CHNL_LNK),
@@ -395,7 +395,7 @@ async def start(client, message):
             if PREMIUM_AND_REFERAL_MODE == True:
                 buttons = [
                   [
-            InlineKeyboardButton('Vɪsɪᴛ WɪsɪᴏɴX.ᴄᴏᴍ', web_app=WebAppInfo(url="https://wisionx.com"))
+            InlineKeyboardButton('Vɪsɪᴛ variabletribe.ᴄᴏᴍ', web_app=WebAppInfo(url="https://variabletribe.com"))
                 ],    
                 [
                     InlineKeyboardButton('Aᴜᴅɪᴏʙᴏᴏᴋs Cʜᴀɴɴᴇʟʟ', url=CHNL_LNK),
@@ -417,7 +417,7 @@ async def start(client, message):
             else:
                 buttons = [
                 [
-                     InlineKeyboardButton('Vɪsɪᴛ WɪsɪᴏɴX.ᴄᴏᴍ', web_app=WebAppInfo(url="https://wisionx.com"))
+                     InlineKeyboardButton('Vɪsɪᴛ WɪsɪᴏɴX.ᴄᴏᴍ', web_app=WebAppInfo(url="https://variabletribe.com"))
                 ],
                 [
                     InlineKeyboardButton('Aᴜᴅɪᴏʙᴏᴏᴋs Cʜᴀɴɴᴇʟʟ', url=CHNL_LNK),

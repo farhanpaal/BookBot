@@ -30,7 +30,7 @@ async def trendlist_cmd(client: Client, message):
     formatted = "\n".join(f"{i+1}. <b>{m}</b>" for i, m in enumerate(lines))
     footer = (
         "⚡️ These are the top trending searches users searched, "
-        "Love From WisionX Team."
+        "Love From "VariableTribe" Team."
     )
 
     await message.reply_text(
