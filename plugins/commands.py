@@ -254,16 +254,30 @@ async def start(client, message):
                     reply_markup=reply_markup
                 )
                 
+                # try:
+                #     await client.send_message(
+                #         LOG_CHANNEL,
+                #         f"👑 <b>Boss User</b> {message.from_user.mention} requested file <b>{file_name}</b> "
+                #         f"with Id <code>{log_msg.id}</code> via deep link from <b>{client.me.first_name}</b> Bot."
+                #     )
+                # except Exception as log_error:
+                #     logger.error(f"Logging failed: {log_error}")
+
                 try:
-                    await client.send_message(
-                        LOG_CHANNEL,
-                        f"👑 <b>Boss User</b> {message.from_user.mention} requested file <b>{file_name}</b> "
-                        f"with Id <code>{log_msg.id}</code> via deep link from <b>{client.me.first_name}</b> Bot."
-                    )
+                    log_message = f"�� <b>Boss User</b> {message.from_user.mention} requested file <b>{file_name}</b>"
+                    if 'log_msg' in locals() and hasattr(log_msg, 'id'):
+                        log_message += f" with Id <code>{log_msg.id}</code>"
+                    log_message += f" via deep link from <b>{client.me.first_name}</b> Bot."
+                    
+                    await client.send_message(LOG_CHANNEL, log_message, parse_mode=enums.ParseMode.HTML)
+                    logger.info(f"Download logged successfully for user {message.from_user.id}")
                 except Exception as log_error:
                     logger.error(f"Logging failed: {log_error}")
-
-
+                    # Try alternative logging method
+                    try:
+                        await client.send_message(LOG_CHANNEL, f"User {message.from_user.mention} downloaded {file_name}")
+                    except:
+                        pass
                 # Auto-delete logic
                 if AUTO_DELETE_TIME > 0:
                     deleter_msg = await message.reply_text(script.AUTO_DELETE_MSG.format(AUTO_DELETE_MIN))
@@ -271,6 +285,8 @@ async def start(client, message):
                     await sent_msg.delete()
                     await deleter_msg.edit_text(script.FILE_DELETED_MSG)
                     
+
+
                 return
 
         except (binascii.Error, ValueError) as e:
