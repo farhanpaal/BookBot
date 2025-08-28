@@ -139,10 +139,10 @@ async def start(client, message):
                     orig_msg = await client.get_messages(SECONDARY_DB_CHANNEL, int(db_message_id))
                     if not orig_msg or (hasattr(orig_msg, "empty") and orig_msg.empty):
                         return await message.reply("❌ File not found in any database")
-                    
-            if AUTH_CHANNEL:
-                # AUTH_CHANNEL is now a list of ints
-                missing = await is_subscribed(client, message, AUTH_CHANNEL)
+                
+                if AUTH_CHANNEL:
+                    # AUTH_CHANNEL is now a list of ints
+                    missing = await is_subscribed(client, message, AUTH_CHANNEL)
                 if missing:
                     # append “Try Again” button
                     username = (await client.get_me()).username
@@ -159,7 +159,7 @@ async def start(client, message):
                     return
 
 
-               # Verification check
+                # Verification check
                 if not await db.has_premium_access(message.from_user.id):
                     if not await check_verification(client, message.from_user.id) and VERIFY:
                         text = "<b>ʜᴇʏ {} 👋,\n\nʏᴏᴜ ᴀʀᴇ ɴᴏᴛ ᴠᴇʀɪғɪᴇᴅ ᴛᴏᴅᴀʏ, ᴘʟᴇᴀꜱᴇ ᴄʟɪᴄᴋ ᴏɴ ᴠᴇʀɪғʏ & ɢᴇᴛ ᴜɴʟɪᴍɪᴛᴇᴅ ᴀᴄᴄᴇꜱꜱ ғᴏʀ ᴛᴏᴅᴀʏ</b>"
@@ -196,7 +196,7 @@ async def start(client, message):
                         return
                                     
 
-                            # Handle text messages
+                # Handle text messages
                 if not orig_msg.media:
                     # Send text message directly
                     sent_msg = await client.send_message(
@@ -235,6 +235,7 @@ async def start(client, message):
 
                 # Stream mode handling
                 reply_markup = None
+                log_msg = None  # Initialize log_msg variable
                 if STREAM_MODE:
                     log_msg = await client.send_cached_media(LOG_CHANNEL, file_id)
                     stream_link = f"{URL}watch/{log_msg.id}/{quote_plus(file_name)}?hash={get_hash(log_msg)}"
@@ -254,14 +255,24 @@ async def start(client, message):
                     reply_markup=reply_markup
                 )
                 
+                # Debug message to verify logging works
+                await client.send_message(LOG_CHANNEL, f"DEBUG: File {file_name} sent to user {message.from_user.id}")
+                
                 try:
-                    await client.send_message(
-                        LOG_CHANNEL,
-                        f"👑 <b>Boss User</b> {message.from_user.mention} requested file <b>{file_name}</b> "
-                        f"with Id <code>{log_msg.id}</code> via deep link from <b>{client.me.first_name}</b> Bot."
-                    )
+                    log_message = f"👑 <b>Boss User</b> {message.from_user.mention} requested file <b>{file_name}</b>"
+                    if log_msg and hasattr(log_msg, 'id'):
+                        log_message += f" with Id <code>{log_msg.id}</code>"
+                    log_message += f" via deep link from <b>{client.me.first_name}</b> Bot."
+                    
+                    await client.send_message(LOG_CHANNEL, log_message, parse_mode=enums.ParseMode.HTML)
+                    logger.info(f"Download logged successfully for user {message.from_user.id}")
                 except Exception as log_error:
                     logger.error(f"Logging failed: {log_error}")
+                    # Try alternative logging method
+                    try:
+                        await client.send_message(LOG_CHANNEL, f"User {message.from_user.mention} downloaded {file_name}")
+                    except:
+                        pass
 
 
                 # Auto-delete logic
