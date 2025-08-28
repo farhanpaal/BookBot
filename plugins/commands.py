@@ -139,8 +139,8 @@ async def start(client, message):
                     orig_msg = await client.get_messages(SECONDARY_DB_CHANNEL, int(db_message_id))
                     if not orig_msg or (hasattr(orig_msg, "empty") and orig_msg.empty):
                         return await message.reply("❌ File not found in any database")
-                    
-            if AUTH_CHANNEL:
+                
+                if AUTH_CHANNEL:
                 # AUTH_CHANNEL is now a list of ints
                 missing = await is_subscribed(client, message, AUTH_CHANNEL)
                 if missing:
@@ -159,7 +159,7 @@ async def start(client, message):
                     return
 
 
-               # Verification check
+                # Verification check
                 if not await db.has_premium_access(message.from_user.id):
                     if not await check_verification(client, message.from_user.id) and VERIFY:
                         text = "<b>ʜᴇʏ {} 👋,\n\nʏᴏᴜ ᴀʀᴇ ɴᴏᴛ ᴠᴇʀɪғɪᴇᴅ ᴛᴏᴅᴀʏ, ᴘʟᴇᴀꜱᴇ ᴄʟɪᴄᴋ ᴏɴ ᴠᴇʀɪғʏ & ɢᴇᴛ ᴜɴʟɪᴍɪᴛᴇᴅ ᴀᴄᴄᴇꜱꜱ ғᴏʀ ᴛᴏᴅᴀʏ</b>"
@@ -196,7 +196,7 @@ async def start(client, message):
                         return
                                     
 
-                            # Handle text messages
+                # Handle text messages
                 if not orig_msg.media:
                     # Send text message directly
                     sent_msg = await client.send_message(
