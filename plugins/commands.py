@@ -18,28 +18,6 @@ BATCH_FILES = {}
 join_db = JoinReqs
 
 
-#from deepseek to test weather log message will appear
-async def log_download(client, user, file_name, file_size, source="Search"):
-    """Log download events to log channel"""
-    try:
-        log_text = f"""
-📥 <b>Book Downloaded</b>
-
-👤 <b>User:</b> {user.mention} (ID: <code>{user.id}</code>)
-📖 <b>Book:</b> <code>{file_name}</code>
-📦 <b>Size:</b> {file_size}
-🕒 <b>Time:</b> {datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")}
-🔗 <b>Source:</b> {source}
-        """
-        await client.send_message(
-            LOG_CHANNEL,
-            log_text,
-            parse_mode=enums.ParseMode.HTML,
-            disable_web_page_preview=True
-        )
-    except Exception as e:
-        logger.error(f"Download log failed: {e}")
-
 def formate_file_name(file_name):
     for c in ["[", "]", "(", ")"]:
         file_name = file_name.replace(c, "")
@@ -528,9 +506,6 @@ async def start(client, message):
                     reply_markup=reply_markup
                 )
                 filesarr.append(msg)
-                   # ADD THIS LINE:
-                await log_download(client, message.from_user, title, size, "Batch")
-                
 
             except FloodWait as e:
                 await asyncio.sleep(e.value)
@@ -632,8 +607,6 @@ async def start(client, message):
                 except:
                     continue
             filesarr.append(p)
-            # ADD THIS LINE:
-            await log_download(client, message.from_user, file_name, size, "Batch Store")
             await asyncio.sleep(1)
         await sts.delete()
 
@@ -721,9 +694,6 @@ async def start(client, message):
         if PREMIUM_AND_REFERAL_MODE == True:
             text += "<b>ɪғ ʏᴏᴜ ᴡᴀɴᴛ ғɪʟᴇꜱ ᴡɪᴛʜᴏᴜᴛ ᴏᴘᴇɴɪɴɢ ᴀɴʏ ʟɪɴᴋ ᴀɴᴅ ᴡᴀᴛᴄʜɪɴɢ ᴀᴅs ᴛʜᴇɴ ʙᴜʏ ʙᴏᴛ ꜱᴜʙꜱᴄʀɪᴘᴛɪᴏɴ ☺️\n\n💶 ꜱᴇɴᴅ /plan ᴛᴏ ʙᴜʏ ꜱᴜʙꜱᴄʀɪᴘᴛɪᴏɴ</b>"
         k = await client.send_message(chat_id=message.from_user.id, text=text, reply_markup=InlineKeyboardMarkup(btn))
-        
-        # ADD THIS LINE:
-        await log_download(client, message.from_user, "Shortlink File", "N/A", "Shortlink")
         await asyncio.sleep(300)
         await k.edit("<b>✅ ʏᴏᴜʀ ᴍᴇssᴀɢᴇ ɪs sᴜᴄᴄᴇssғᴜʟʟʏ ᴅᴇʟᴇᴛᴇᴅ</b>")
         return
@@ -794,8 +764,6 @@ async def start(client, message):
                 reply_markup=reply_markup
             )
             filesarr.append(msg)
-            # ADD THIS LINE:
-            await log_download(client, message.from_user, title, size, "Multi Files")
 
 
         # Send the warning using your AUTO_DELETE_MSG template
@@ -843,9 +811,6 @@ async def start(client, message):
             if PREMIUM_AND_REFERAL_MODE == True:
                 text += "<b>ɪғ ʏᴏᴜ ᴡᴀɴᴛ ғɪʟᴇꜱ ᴡɪᴛʜᴏᴜᴛ ᴏᴘᴇɴɪɴɢ ᴀɴʏ ʟɪɴᴋ  ᴀɴᴅ ᴡᴀᴛᴄʜɪɴɢ ᴀᴅs ᴛʜᴇɴ ʙᴜʏ ʙᴏᴛ ꜱᴜʙꜱᴄʀɪᴘᴛɪᴏɴ ☺️\n\n💶 ꜱᴇɴᴅ /plan ᴛᴏ ʙᴜʏ ꜱᴜʙꜱᴄʀɪᴘᴛɪᴏɴ</b>"
             k = await client.send_message(chat_id=message.from_user.id, text=text, reply_markup=InlineKeyboardMarkup(btn))
-            
-            # ADD THIS LINE:
-            await log_download(client, message.from_user, "Shortlink File", "N/A", "Shortlink")
             await asyncio.sleep(1200)
             await k.edit("<b>✅ ʏᴏᴜʀ ᴍᴇssᴀɢᴇ ɪs sᴜᴄᴄᴇssғᴜʟʟʏ ᴅᴇʟᴇᴛᴇᴅ</b>")
             return
@@ -881,9 +846,6 @@ async def start(client, message):
                 protect_content=True if pre == 'filep' else False,
                 reply_markup=reply_markup
             )
-            # ADD THIS LINE:
-            await log_download(client, message.from_user, title, size, "Single File")
-
             filetype = msg.media
             file = getattr(msg, filetype.value)
             title = file.file_name

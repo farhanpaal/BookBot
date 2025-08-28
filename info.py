@@ -32,7 +32,7 @@ CHANNELS = [int(ch) if id_pattern.search(ch) else ch for ch in environ.get('CHAN
 REQUEST_TO_JOIN_MODE = bool(environ.get('REQUEST_TO_JOIN_MODE', False)) # Set True Or False
 TRY_AGAIN_BTN = bool(environ.get('TRY_AGAIN_BTN', False)) # Set True Or False (This try again button is only for request to join fsub not for normal fsub)
 
-# -1002613782189 
+# -1002613782189    1001864718283
 AUTH_CHANNEL = [int(ch) for ch in environ.get('AUTH_CHANNEL', '-1001864718283').split() if id_pattern.match(ch)] #variableTribe
 
 # This Channel Is For When User Request Any File Name With command or hashtag like - /request or #request
@@ -57,7 +57,7 @@ AUTO_DELETE_MIN = int(environ.get("AUTO_DELETE_MIN", "2")) # Time in Minutes
 # Website Info:
 WEBSITE_URL_MODE = bool(environ.get('WEBSITE_URL_MODE', True)) # Set True or False
 # If Website Url Mode Is True Then Fill All Required Variable, If False Then Don't Fill.
-WEBSITE_URL = environ.get("WEBSITE_URL", "https://wisionx.42web.io") # For More Information Check Video On Yt - 🔴
+WEBSITE_URL = environ.get("WEBSITE_URL", "https://variable.42web.io") # For More Information Check Video On Yt - 🔴
 
 # This Channel Is For Delete Index File, Forward Your File In This Channel Which You Want To Delete Then Bot Automatically Delete That File From Database.
 DELETE_CHANNELS = [int(dch) if id_pattern.search(dch) else dch for dch in environ.get('DELETE_CHANNELS', '0').split()]  # For Multiple Id Use One Space Between Each.
