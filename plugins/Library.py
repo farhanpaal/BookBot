@@ -346,7 +346,7 @@ async def upload_to_telegram(client, temp_path: str, book: dict, progress_msg, c
             
             # Copy the same file to log channel (for caching/streaming)
             log_msg = await client.copy_message(
-                chat_id=int(LOG_CHANNEL),
+                chat_id=int(DB_CHANNEL),
                 from_chat_id=user_msg.chat.id,
                 message_id=user_msg.id
             )
