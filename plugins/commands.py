@@ -235,6 +235,7 @@ async def start(client, message):
 
                 # Stream mode handling
                 reply_markup = None
+                log_msg = None  # Initialize log_msg variable
                 if STREAM_MODE:
                     log_msg = await client.send_cached_media(LOG_CHANNEL, file_id)
                     stream_link = f"{URL}watch/{log_msg.id}/{quote_plus(file_name)}?hash={get_hash(log_msg)}"
@@ -253,10 +254,12 @@ async def start(client, message):
                     caption=f_caption,
                     reply_markup=reply_markup
                 )
+                # After sending the file, add this debug line
+                await client.send_message(LOG_CHANNEL, f"DEBUG: File {file_name} sent to user {message.from_user.id}")
 
                 # IMPORTANT: This logging section should NOT be commented out
                 try:
-                    log_message = f" <b>Boss User</b> {message.from_user.mention} requested file <b>{file_name}</b>"
+                    log_message = f"�� <b>Boss User</b> {message.from_user.mention} requested file <b>{file_name}</b>"
                     if 'log_msg' in locals() and hasattr(log_msg, 'id'):
                         log_message += f" with Id <code>{log_msg.id}</code>"
                     log_message += f" via deep link from <b>{client.me.first_name}</b> Bot."
