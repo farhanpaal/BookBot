@@ -143,7 +143,7 @@ async def start(client, message):
                 if AUTH_CHANNEL:
                     # AUTH_CHANNEL is now a list of ints
                     missing = await is_subscribed(client, message, AUTH_CHANNEL)
-                if missing:
+                    if missing:
                     # append “Try Again” button
                     username = (await client.get_me()).username
                     param    = message.command[1] if len(message.command)>1 else "true"
