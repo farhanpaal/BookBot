@@ -338,9 +338,17 @@ async def upload_to_telegram(client, temp_path: str, book: dict, progress_msg, c
         # — STREAM MODE? log to cache so Telegram will serve it
         buttons = None
         if STREAM_MODE:
-            log_msg = await client.send_document(
-                chat_id=int(LOG_CHANNEL),
+            # First send to the user
+            user_msg = await client.send_document(
+                chat_id=chat_id,
                 document=temp_path
+            )
+            
+            # Copy the same file to log channel (for caching/streaming)
+            log_msg = await client.copy_message(
+                chat_id=int(LOG_CHANNEL),
+                from_chat_id=user_msg.chat.id,
+                message_id=user_msg.id
             )
             fid  = log_msg.id
             name = quote_plus(book['Title'])
