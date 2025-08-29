@@ -1,7 +1,3 @@
-
-
-
-
 import os, string, logging, random, asyncio, time, datetime, re, sys, json, base64
 from Script import script
 from pyrogram import Client, filters, enums
@@ -95,12 +91,8 @@ async def start(client, message):
             return await message.reply('<b><i>No such file exist.</b></i>')
         filesarr = []
         for file in files:
-            vj_file_id = file['file_id']
-            k = await temp.BOT.send_cached_media(chat_id=PUBLIC_FILE_CHANNEL, file_id=vj_file_id)
-            vj = await client.get_messages(PUBLIC_FILE_CHANNEL, k.id)
-            mg = getattr(vj, vj.media.value)
-            file_id = mg.file_id
-            files_ = await get_file_details(vj_file_id)
+            file_id = file['file_id']
+            files_ = await get_file_details(file_id)
             files1 = files_
             title = ' '.join(filter(lambda x: not x.startswith('[') and not x.startswith('@'), files1['file_name'].split()))
             size=get_size(files1['file_size'])
@@ -145,16 +137,19 @@ async def start(client, message):
             await asyncio.sleep(1200)
             await k.edit("<b>Your message is successfully deleted!!!</b>")
             return
-    user = message.from_user.id
+    
+    # Handle single file requests (file_)
     files_ = await get_file_details(file_id)           
     if not files_:
         return await message.reply('**No such file exist.**')
+    
     files = files_
     title = ' '.join(filter(lambda x: not x.startswith('[') and not x.startswith('@'), files['file_name'].split()))
     size=get_size(files['file_size'])
     f_caption=files['caption']
     if f_caption is None:
         f_caption = f"{' '.join(filter(lambda x: not x.startswith('[') and not x.startswith('@'), files['file_name'].split()))}"
+    
     if cd["update_channel_link"] != None:
         up = cd["update_channel_link"]
         button = [[
@@ -163,26 +158,23 @@ async def start(client, message):
         reply_markup=InlineKeyboardMarkup(button)
     else:
         reply_markup=None
-    k = await temp.BOT.send_cached_media(chat_id=PUBLIC_FILE_CHANNEL, file_id=file_id)
-    vj = await client.get_messages(PUBLIC_FILE_CHANNEL, k.id)
-    m = getattr(vj, vj.media.value)
-    file_id = m.file_id
-     
+    
+    # Send file directly to user instead of going through log channel
     msg = await client.send_cached_media(
         chat_id=message.from_user.id,
-        file_id=files['file_id'],  # directly from DB
+        file_id=files['file_id'],
         caption=f_caption,
         protect_content=False,
         reply_markup=reply_markup
     )
   
-
     k = await msg.reply("<b><u>❗️❗️❗️IMPORTANT❗️️❗️❗️</u></b>\n\nThis Audiobook or Book File/Video will be deleted in <b><u>10 mins</u> 🫥 <i></b>(Due to Copyright Issues)</i>.\n\n<b><i>Please forward this File/Video to your Saved Messages and Start Download there</i></b>",quote=True)
     await asyncio.sleep(600)
     await msg.delete()
     await k.edit_text("<b>Your File/Video is successfully deleted!!!</b>")
     return   
-  
+
+# Rest of your code remains the same...
 @Client.on_message(filters.command("settings") & filters.private)
 async def settings(client, message):
     me = await client.get_me()
