@@ -1916,7 +1916,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
             InlineKeyboardButton("🟢 Aʟʀᴇᴀᴅʏ Aᴠᴀɪʟᴀʙʟᴇ 🟢", callback_data=f"alalert#{from_user}")
         ]]
         btn2 = [[
-            InlineKeyboardButton('Aᴜᴅɪᴏʙᴏᴏᴋs Cʜᴀɴɴᴇʟʟ', url=CHNL_LNK),
+            InlineKeyboardButton('Admin', url=t.me/variablesupport),
             InlineKeyboardButton('ʙᴏᴏᴋs Cʜᴀɴɴᴇʟ', url=GRP_LNK)
         ],[
             InlineKeyboardButton("Vɪᴇᴡ Sᴛᴀᴛᴜs", url=f"{query.message.link}")
@@ -1991,7 +1991,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
         if PREMIUM_AND_REFERAL_MODE == True:
             buttons = [
             [
-                InlineKeyboardButton('Aᴜᴅɪᴏʙᴏᴏᴋs Cʜᴀɴɴᴇʟʟ', url=CHNL_LNK),
+                InlineKeyboardButton('Admin', url=t.me/variablesupport),
                 InlineKeyboardButton('ʙᴏᴏᴋs Cʜᴀɴɴᴇʟ', url=GRP_LNK)
             ],
              [
@@ -2010,7 +2010,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
         else:
             buttons = [
             [
-                InlineKeyboardButton('Aᴜᴅɪᴏʙᴏᴏᴋs Cʜᴀɴɴᴇʟʟ', url=CHNL_LNK),
+                InlineKeyboardButton('Admin', url=t.me/variablesupport),
                 InlineKeyboardButton('ʙᴏᴏᴋs Cʜᴀɴɴᴇʟ', url=GRP_LNK)
             ],
             [
