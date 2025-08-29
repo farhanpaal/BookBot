@@ -58,27 +58,32 @@ async def gen_link_s(bot, message):
         # Copy to DB channel first (for storage)
         post = await replied.copy(DB_CHANNEL)
         
-        # Get file details from the ORIGINAL message, not the copied one
-        file_type = replied.media.value if replied.media else "text"
-        
-        # Get the actual file information
+        # Get the actual file information from ORIGINAL message
         media = None
+        file_id = None
+        
         if replied.document:
             media = replied.document
+            file_id = replied.document.file_id
         elif replied.video:
             media = replied.video
+            file_id = replied.video.file_id
         elif replied.audio:
             media = replied.audio
+            file_id = replied.audio.file_id
         elif replied.photo:
             media = replied.photo
+            file_id = replied.photo.file_id
+        else:
+            return await message.reply("❌ Unsupported media type")
         
         if media:
-            # ✅ CRITICAL: Save the ORIGINAL file info, not the copied one
+            # ✅ Save the ORIGINAL file info to database
             await save_file(media)
-            logger.info(f"File {media.file_id} successfully indexed in database.")
+            logger.info(f"File {file_id} successfully indexed in database.")
         
-        # ✅ Use the ORIGINAL file_id, not the DB_CHANNEL message ID
-        string = f"file_{media.file_id}"  # Use the actual file_id
+        # ✅ Use the actual Telegram file_id for the link
+        string = f"file_{file_id}"  # Use the actual file_id
         outstr = base64.urlsafe_b64encode(string.encode()).decode().strip("=")
         
         tg_link = f"https://t.me/{username}?start={outstr}"
@@ -101,7 +106,7 @@ async def gen_link_s(bot, message):
     except Exception as e:
         error_trace = traceback.format_exc()
         logger.error(f"Command Link Error: {str(e)}\n{error_trace}")
-        await message.reply_text("Failed to generate link. Please try again.")
+        await message.reply_text(f"❌ Failed to generate link: {str(e)}")
 # =============================================  
     
 @Client.on_message(filters.command(['batch', 'pbatch']) & filters.create(allowed))

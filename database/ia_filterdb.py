@@ -27,11 +27,12 @@ sec_col = sec_db[COLLECTION_NAME]
 async def save_file(media):
     """Save file in the database."""
     
-    file_id = unpack_new_file_id(media.file_id)
+    # Use the ORIGINAL file_id, don't unpack it
+    file_id = media.file_id  # ✅ USE ORIGINAL FILE_ID
     file_name = clean_file_name(media.file_name)
     
     file = {
-        'file_id': file_id,
+        'file_id': file_id,  # Store original file_id
         'file_name': file_name,
         'file_size': media.file_size,
         'caption': media.caption.html if media.caption else None
@@ -42,23 +43,28 @@ async def save_file(media):
 
     try:
         col.insert_one(file)
-        print(f"{file_name} is successfully saved.")
+        print(f"{file_name} is successfully saved with file_id: {file_id}")
         return True, 1
     except DuplicateKeyError:
         print(f"{file_name} is already saved.")
         return False, 0
-    except:
+    except Exception as e:
+        print(f"Error saving file: {e}")
         if MULTIPLE_DATABASE:
             try:
                 sec_col.insert_one(file)
-                print(f"{file_name} is successfully saved.")
+                print(f"{file_name} is successfully saved in secondary DB.")
                 return True, 1
             except DuplicateKeyError:
-                print(f"{file_name} is already saved.")
+                print(f"{file_name} is already saved in secondary DB.")
+                return False, 0
+            except Exception as e2:
+                print(f"Secondary DB error: {e2}")
                 return False, 0
         else:
-            print("Your Current File Database Is Full, Turn On Multiple Database Feature And Add Second File Mongodb To Save File.")
-
+            print("Your Current File Database Is Full.")
+            return False, 0
+        
 def clean_file_name(file_name):
     """Clean and format the file name."""
     file_name = re.sub(r"(_|\-|\.|\+)", " ", str(file_name)) 
@@ -71,12 +77,19 @@ def clean_file_name(file_name):
 
 def is_file_already_saved(file_id, file_name):
     """Check if the file is already saved in either collection."""
-    found1 = {'file_name': file_name}
-    found = {'file_id': file_id}
-
+    # Check by file_id (most reliable)
+    found_by_id = {'file_id': file_id}
+    
     for collection in [col, sec_col]:
-        if collection.find_one(found1) or collection.find_one(found):
-            print(f"{file_name} is already saved.")
+        if collection.find_one(found_by_id):
+            print(f"File with ID {file_id} is already saved.")
+            return True
+    
+    # Optional: Also check by file_name as fallback
+    found_by_name = {'file_name': file_name}
+    for collection in [col, sec_col]:
+        if collection.find_one(found_by_name):
+            print(f"File with name {file_name} is already saved.")
             return True
             
     return False
@@ -149,7 +162,24 @@ async def get_bad_files(query, file_type=None, use_filter=False):
     return files, total_results
 
 async def get_file_details(query):
-    return col.find_one({'file_id': query}) or sec_col.find_one({'file_id': query})
+    """Get file details by file_id"""
+    print(f"DEBUG: Searching for file_id: {query}")  # Add debug print
+    
+    # Search in primary database
+    result = col.find_one({'file_id': query})
+    if result:
+        print(f"DEBUG: Found in primary DB: {result}")
+        return result
+    
+    # Search in secondary database
+    if MULTIPLE_DATABASE:
+        result = sec_col.find_one({'file_id': query})
+        if result:
+            print(f"DEBUG: Found in secondary DB: {result}")
+            return result
+    
+    print(f"DEBUG: File not found with ID: {query}")
+    return None
 
 def encode_file_id(s: bytes) -> str:
     r = b""
