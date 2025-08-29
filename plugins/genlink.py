@@ -54,75 +54,54 @@ async def gen_link_s(bot, message):
         
         if not replied:
             return await message.reply("❌ Please reply to a file to generate link")
-        # Copy to DB channel with logging
+        
+        # Copy to DB channel first (for storage)
         post = await replied.copy(DB_CHANNEL)
-        # Also send a copy back to the user
-        await replied.copy(message.chat.id)
         
-        # Get file details
-        # Retrieve file name from the correct media attribute
-        file_name = None
-        if post.document:
-            file_name = post.document.file_name
-        elif post.video:
-            file_name = post.video.file_name
-        elif post.audio:
-            file_name = post.audio.file_name
-        elif post.voice:
-            file_name = "Voice Message"
-        elif post.photo:
-            file_name = "Photo"
-        else:
-            file_name = "No Name"
-        # Handle different media types
+        # Get file details from the ORIGINAL message, not the copied one
+        file_type = replied.media.value if replied.media else "text"
+        
+        # Get the actual file information
         media = None
-        if post.document:
-            media = post.document
-        elif post.video:
-            media = post.video
-        elif post.audio:
-            media = post.audio
-        elif post.voice:
-            media = post.voice
-        elif post.photo:
-            media = post.photo
-        else:
-            return await message.reply("❌ Unsupported media type.")
-
-        media.caption = post.caption
-        await save_file(media)
-        logger.info(f"{file_name} Successfully copied to DB and Indexed.")
+        if replied.document:
+            media = replied.document
+        elif replied.video:
+            media = replied.video
+        elif replied.audio:
+            media = replied.audio
+        elif replied.photo:
+            media = replied.photo
         
-        file_id = str(post.id)
-        string = f"file_{file_id}"
+        if media:
+            # ✅ CRITICAL: Save the ORIGINAL file info, not the copied one
+            await save_file(media)
+            logger.info(f"File {media.file_id} successfully indexed in database.")
+        
+        # ✅ Use the ORIGINAL file_id, not the DB_CHANNEL message ID
+        string = f"file_{media.file_id}"  # Use the actual file_id
         outstr = base64.urlsafe_b64encode(string.encode()).decode().strip("=")
         
-        tg_link    = f"https://t.me/{username}?start={outstr}"
+        tg_link = f"https://t.me/{username}?start={outstr}"
+        
+        # Send link to user
         if WEBSITE_URL_MODE:
-            # web_link = f"{WEBSITE_URL}?variabletribe={outstr}"
             web_link = f"{WEBSITE_URL}/?ref={outstr}"
-            # Send both links
             await message.reply_text(
                 "**Here's Your Share Links:**\n"
                 f"• Telegram Deep-Link:\n  {tg_link}\n\n"
                 f"• Web-Shortcut Link:\n  {web_link}"
             )
         else:
-            # Fallback to only Telegram link
             await message.reply_text(f"**Here's Your Share Link:**\n{tg_link}")
-        # Enhanced logging
-
-        log_text = f"""Boss User 👤 Username: @{message.from_user.username} Requested📄 File ID: {post.id} via🔗 Generated Link: {tg_link}"""
+        
+        # Log the action
+        log_text = f"""Boss User 👤 Username: @{message.from_user.username} Generated🔗 Link: {tg_link}"""
         await bot.send_message(LOG_CHANNEL, log_text)
 
     except Exception as e:
         error_trace = traceback.format_exc()
         logger.error(f"Command Link Error: {str(e)}\n{error_trace}")
-        
-        error_msg = f"❌ Error in gen_link_s: {str(e)}"
-        await bot.send_message(LOG_CHANNEL, f"{error_msg}\n```{error_trace}```")
         await message.reply_text("Failed to generate link. Please try again.")
-
 # =============================================  
     
 @Client.on_message(filters.command(['batch', 'pbatch']) & filters.create(allowed))
