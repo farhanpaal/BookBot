@@ -140,10 +140,10 @@ async def start(client, message):
                     if not orig_msg or (hasattr(orig_msg, "empty") and orig_msg.empty):
                         return await message.reply("❌ File not found in any database")
                     
-            if AUTH_CHANNEL:
-                # AUTH_CHANNEL is now a list of ints
-                missing = await is_subscribed(client, message, AUTH_CHANNEL)
-                if missing:
+                if AUTH_CHANNEL:
+                    # AUTH_CHANNEL is now a list of ints
+                    missing = await is_subscribed(client, message, AUTH_CHANNEL)
+                    if missing:
                     # append “Try Again” button
                     username = (await client.get_me()).username
                     param    = message.command[1] if len(message.command)>1 else "true"
@@ -159,7 +159,7 @@ async def start(client, message):
                     return
 
 
-               # Verification check
+                # Verification check
                 if not await db.has_premium_access(message.from_user.id):
                     if not await check_verification(client, message.from_user.id) and VERIFY:
                         text = "<b>ʜᴇʏ {} 👋,\n\nʏᴏᴜ ᴀʀᴇ ɴᴏᴛ ᴠᴇʀɪғɪᴇᴅ ᴛᴏᴅᴀʏ, ᴘʟᴇᴀꜱᴇ ᴄʟɪᴄᴋ ᴏɴ ᴠᴇʀɪғʏ & ɢᴇᴛ ᴜɴʟɪᴍɪᴛᴇᴅ ᴀᴄᴄᴇꜱꜱ ғᴏʀ ᴛᴏᴅᴀʏ</b>"
@@ -196,7 +196,7 @@ async def start(client, message):
                         return
                                     
 
-                            # Handle text messages
+                # Handle text messages
                 if not orig_msg.media:
                     # Send text message directly
                     sent_msg = await client.send_message(
@@ -270,7 +270,6 @@ async def start(client, message):
                         )
                 except Exception as log_error:
                     logger.error(f"Logging failed: {log_error}")
-
 
                 # Auto-delete logic
                 if AUTO_DELETE_TIME > 0:
