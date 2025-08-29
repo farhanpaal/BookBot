@@ -131,15 +131,25 @@ async def start(client, message):
             
             if decoded.startswith("file_"):
                 _, db_message_id = decoded.split("_", 1)
-                 # Try primary database channel first
-                orig_msg = await client.get_messages(DB_CHANNEL, int(db_message_id))
-
-                # If not found, empty, or not the right type, fall back to secondary DB channel
-                if not orig_msg or (hasattr(orig_msg, "empty") and orig_msg.empty) or (not orig_msg.media and not getattr(orig_msg, "text", None)):
-                    orig_msg = await client.get_messages(SECONDARY_DB_CHANNEL, int(db_message_id))
-                    if not orig_msg or (hasattr(orig_msg, "empty") and orig_msg.empty):
-                        return await message.reply("❌ File not found in any database")
-                    
+                
+                # REPLACE THIS ENTIRE BLOCK:
+                # orig_msg = await client.get_messages(DB_CHANNEL, int(db_message_id))
+                # if not orig_msg or (hasattr(orig_msg, "empty") and orig_msg.empty) or (not orig_msg.media and not getattr(orig_msg, "text", None)):
+                #     orig_msg = await client.get_messages(SECONDARY_DB_CHANNEL, int(db_message_id))
+                #     if not orig_msg or (hasattr(orig_msg, "empty") and orig_msg.empty):
+                #         return await message.reply("❌ File not found in any database")
+                
+                # WITH THIS:
+                files_ = await get_file_details(db_message_id)
+                if not files_:
+                    return await message.reply("❌ File not found in database")
+                
+                # Get file details from database result
+                file_id = files_['file_id']
+                file_name = files_['file_name']
+                file_size = files_['file_size']
+                f_caption = files_['caption']
+           
             if AUTH_CHANNEL:
                 # AUTH_CHANNEL is now a list of ints
                 missing = await is_subscribed(client, message, AUTH_CHANNEL)
