@@ -167,13 +167,19 @@ async def start(client, message):
     # vj = await client.get_messages(PUBLIC_FILE_CHANNEL, k.id)
     # m = getattr(vj, vj.media.value)
     # file_id = m.file_id
+     
     msg = await client.send_cached_media(
         chat_id=message.from_user.id,
-        file_id=files['file_id'],
+        file_id=files['file_id'],  # directly from DB
         caption=f_caption,
         protect_content=False,
         reply_markup=reply_markup
     )
+    await client.send_message(
+        LOG_CHANNEL,
+        f"User @{message.from_user.username} ({message.from_user.id}) downloaded file {files['file_name']} (ID: {files['file_id']})"
+    )
+
     k = await msg.reply("<b><u>❗️❗️❗️IMPORTANT❗️️❗️❗️</u></b>\n\nThis Audiobook or Book File/Video will be deleted in <b><u>10 mins</u> 🫥 <i></b>(Due to Copyright Issues)</i>.\n\n<b><i>Please forward this File/Video to your Saved Messages and Start Download there</i></b>",quote=True)
     await asyncio.sleep(600)
     await msg.delete()
