@@ -169,7 +169,7 @@ async def start(client, message):
     # file_id = m.file_id
     msg = await client.send_cached_media(
         chat_id=message.from_user.id,
-        file_id=file_id,
+        file_id=files['file_id'],
         caption=f_caption,
         protect_content=False,
         reply_markup=reply_markup
