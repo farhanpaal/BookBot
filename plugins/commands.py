@@ -236,15 +236,19 @@ async def start(client, message):
                 # Stream mode handling
                 reply_markup = None
                 if STREAM_MODE:
-                    log_msg = await client.send_cached_media(LOG_CHANNEL, file_id)
-                    stream_link = f"{URL}watch/{log_msg.id}/{quote_plus(file_name)}?hash={get_hash(log_msg)}"
-                    download_link = f"{URL}{log_msg.id}/{quote_plus(file_name)}?hash={get_hash(log_msg)}"
+                    # Send file directly to user instead of log channel
+                    user_msg = await client.send_cached_media(message.from_user.id, file_id)
+                    stream_link = f"{URL}watch/{user_msg.id}/{quote_plus(file_name)}?hash={get_hash(user_msg)}"
+                    download_link = f"{URL}{user_msg.id}/{quote_plus(file_name)}?hash={get_hash(user_msg)}"
                     
                     reply_markup = InlineKeyboardMarkup([
                         [InlineKeyboardButton("Download", url=download_link),
-                         InlineKeyboardButton("Stream", url=stream_link)],
+                        InlineKeyboardButton("Stream", url=stream_link)],
                         [InlineKeyboardButton("Web Player", web_app=WebAppInfo(url=stream_link))]
                     ])
+                    
+                    # Delete the file sent to user since we'll send it again with proper caption
+                    await user_msg.delete()
 
                 # Send media with auto-delete
                 sent_msg = await client.send_cached_media(
@@ -280,6 +284,7 @@ async def start(client, message):
         #     await message.reply_text(f"Error processing request: {str(e)}")
         #     return
 
+             
     if AUTH_CHANNEL:
         # Check if user is subscribed to all required channels
         missing = await is_subscribed(client, message, AUTH_CHANNEL)
@@ -678,6 +683,7 @@ async def start(client, message):
             logger.error(f"Verification error: {str(e)}")
             await message.reply_text("<b>Error processing verification</b>", protect_content=True)
             return
+
 
     if data.startswith("sendfiles"):
         chat_id = int("-" + file_id.split("-")[1])
