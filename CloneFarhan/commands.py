@@ -91,8 +91,11 @@ async def start(client, message):
             return await message.reply('<b><i>No such file exist.</b></i>')
         filesarr = []
         for file in files:
-            file_id = file['file_id']
+            file_id = file['file_id']  # Use the file_id directly from DB
             files_ = await get_file_details(file_id)
+            if not files_:
+                continue
+                
             files1 = files_
             title = ' '.join(filter(lambda x: not x.startswith('[') and not x.startswith('@'), files1['file_name'].split()))
             size=get_size(files1['file_size'])
@@ -108,9 +111,10 @@ async def start(client, message):
             else:
                 reply_markup=None
        
+            # Send directly to user instead of going through log channel
             msg = await client.send_cached_media(
                 chat_id=message.from_user.id,
-                file_id=file_id,
+                file_id=file_id,  # Use the file_id directly
                 caption=f_caption,
                 protect_content=False,
                 reply_markup=reply_markup
@@ -162,7 +166,7 @@ async def start(client, message):
     # Send file directly to user instead of going through log channel
     msg = await client.send_cached_media(
         chat_id=message.from_user.id,
-        file_id=files['file_id'],
+        file_id=files['file_id'],  # Use file_id directly from DB
         caption=f_caption,
         protect_content=False,
         reply_markup=reply_markup
