@@ -57,7 +57,8 @@ async def gen_link_s(bot, message):
         # Copy to DB channel with logging
         post = await replied.copy(DB_CHANNEL)
         # Also send a copy back to the user
-        await replied.copy(message.chat.id)
+        # await replied.copy(message.chat.id)
+        await replied.copy(message.from_user.id) 
         
         # Get file details
         # Retrieve file name from the correct media attribute
