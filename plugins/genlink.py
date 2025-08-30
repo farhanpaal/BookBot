@@ -1,9 +1,8 @@
-
 import re, os, json, base64, logging
 from utils import temp
-from pyrogram import filters, Client, enums
+from pyrogram import Client, filters, enums
 from pyrogram.errors.exceptions.bad_request_400 import ChannelInvalid, UsernameInvalid, UsernameNotModified
-from info import ADMINS, LOG_CHANNEL, FILE_STORE_CHANNEL, PUBLIC_FILE_STORE, DB_CHANNEL , WEBSITE_URL_MODE , WEBSITE_URL
+from info import ADMINS, LOG_CHANNEL, FILE_STORE_CHANNEL, PUBLIC_FILE_STORE, DB_CHANNEL, WEBSITE_URL_MODE, WEBSITE_URL
 from database.ia_filterdb import unpack_new_file_id
 from utils import get_size, is_subscribed, pub_is_subscribed, get_poster, search_gagala, temp, get_settings, save_group_settings, get_shortlink, get_tutorial, send_all, get_cap
 import datetime
@@ -28,22 +27,33 @@ async def allowed(_, __, message):
         return True
     return False
 
+def extract_metadata_from_file(file_name):
+    """Extract searchable metadata from filename"""
+    # Remove common unwanted characters and patterns
+    clean_name = re.sub(r'[\[\](){}@#&]', '', file_name)
+    clean_name = re.sub(r'\.(pdf|epub|mobi|azw3|mp3)$', '', clean_name, flags=re.IGNORECASE)
+    
+    # Extract potential title and author
+    parts = re.split(r'[-_ by By BY]', clean_name)
+    parts = [part.strip() for part in parts if part.strip()]
+    
+    title = parts[0] if parts else "Unknown Title"
+    author = parts[1] if len(parts) > 1 else "Unknown Author"
+    
+    return title, author
 
-# ============================================
-import logging
-import traceback
-from pyrogram import filters
-
-# Configure logging
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-    handlers=[
-        logging.FileHandler("bot_logs.log"),
-        logging.StreamHandler()
-    ]
-)
-logger = logging.getLogger(__name__)
+async def format_book_for_channel(file_name, added_by=None):
+    """Format book info for database channel (search-friendly format)"""
+    title, author = extract_metadata_from_file(file_name)
+    
+    book_info = (
+        f"Title: {title}\n"
+        f"Author: {author}\n"
+        f"Added by: {added_by or 'Bot'}\n"
+        f"Date: {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
+    )
+    
+    return book_info
 
 @Client.on_message(filters.command(['link']) & filters.create(allowed))
 async def gen_link_s(bot, message):
@@ -54,65 +64,89 @@ async def gen_link_s(bot, message):
         
         if not replied:
             return await message.reply("❌ Please reply to a file to generate link")
-        # Copy to DB channel with logging
-        post = await replied.copy(DB_CHANNEL)
+        
+        # Get file name
+        file_name = "Unknown File"
+        if replied.document:
+            file_name = replied.document.file_name or "Document"
+        elif replied.video:
+            file_name = replied.video.file_name or "Video"
+        elif replied.audio:
+            file_name = replied.audio.file_name or "Audio"
+        elif replied.photo:
+            file_name = "Photo"
+        
+        # Copy to DB channel with proper formatting
+        formatted_text = await format_book_for_channel(
+            file_name, 
+            f"@{message.from_user.username}" if message.from_user.username else message.from_user.first_name
+        )
+        
+        # Send to database channel with proper formatting
+        if replied.document:
+            post = await bot.send_document(
+                chat_id=DB_CHANNEL,
+                document=replied.document.file_id,
+                caption=formatted_text
+            )
+        elif replied.video:
+            post = await bot.send_video(
+                chat_id=DB_CHANNEL,
+                video=replied.video.file_id,
+                caption=formatted_text
+            )
+        elif replied.audio:
+            post = await bot.send_audio(
+                chat_id=DB_CHANNEL,
+                audio=replied.audio.file_id,
+                caption=formatted_text
+            )
+        elif replied.photo:
+            post = await bot.send_photo(
+                chat_id=DB_CHANNEL,
+                photo=replied.photo.file_id,
+                caption=formatted_text
+            )
+        else:
+            return await message.reply("❌ Unsupported media type")
+        
         # Also send a copy back to the user
         await replied.copy(message.chat.id)
         
-        # Get file details
-        # Retrieve file name from the correct media attribute
-        file_name = None
-        if post.document:
-            file_name = post.document.file_name
-        elif post.video:
-            file_name = post.video.file_name
-        elif post.audio:
-            file_name = post.audio.file_name
-        elif post.voice:
-            file_name = "Voice Message"
-        elif post.photo:
-            file_name = "Photo"
-        else:
-            file_name = "No Name"
-        # Handle different media types
+        # Save to database
         media = None
-        if post.document:
-            media = post.document
-        elif post.video:
-            media = post.video
-        elif post.audio:
-            media = post.audio
-        elif post.voice:
-            media = post.voice
-        elif post.photo:
-            media = post.photo
-        else:
-            return await message.reply("❌ Unsupported media type.")
-
-        media.caption = post.caption
-        await save_file(media)
+        if replied.document:
+            media = replied.document
+        elif replied.video:
+            media = replied.video
+        elif replied.audio:
+            media = replied.audio
+        elif replied.photo:
+            media = replied.photo
+            
+        if media:
+            await save_file(media)
+        
         logger.info(f"{file_name} Successfully copied to DB and Indexed.")
         
         file_id = str(post.id)
         string = f"file_{file_id}"
         outstr = base64.urlsafe_b64encode(string.encode()).decode().strip("=")
         
-        tg_link    = f"https://t.me/{username}?start={outstr}"
+        tg_link = f"https://t.me/{username}?start={outstr}"
+        
         if WEBSITE_URL_MODE:
-            # web_link = f"{WEBSITE_URL}?variabletribe={outstr}"
             web_link = f"{WEBSITE_URL}/?ref={outstr}"
-            # Send both links
             await message.reply_text(
                 "**Here's Your Share Links:**\n"
                 f"• Telegram Deep-Link:\n  {tg_link}\n\n"
                 f"• Web-Shortcut Link:\n  {web_link}"
             )
         else:
-            # Fallback to only Telegram link
             await message.reply_text(f"**Here's Your Share Link:**\n{tg_link}")
+        
         # Enhanced logging
-
-        log_text = f"""Boss User 👤 Username: @{message.from_user.username} Requested📄 File ID: {post.id} via🔗 Generated Link: {tg_link}"""
+        log_text = f"""Boss User 👤 Username: @{message.from_user.username} Requested📄 File: {file_name} via🔗 Generated Link: {tg_link}"""
         await bot.send_message(LOG_CHANNEL, log_text)
 
     except Exception as e:
@@ -123,6 +157,7 @@ async def gen_link_s(bot, message):
         await bot.send_message(LOG_CHANNEL, f"{error_msg}\n```{error_trace}```")
         await message.reply_text("Failed to generate link. Please try again.")
 
+# ... rest of your genlink.py code remains the same ...
 # =============================================  
     
 @Client.on_message(filters.command(['batch', 'pbatch']) & filters.create(allowed))
