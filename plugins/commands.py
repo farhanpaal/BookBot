@@ -235,6 +235,7 @@ async def start(client, message):
 
                 # Stream mode handling
                 reply_markup = None
+                log_msg = None
                 if STREAM_MODE:
                     try:
                         log_msg = await client.send_cached_media(LOG_CHANNEL, file_id)
@@ -257,16 +258,19 @@ async def start(client, message):
                     reply_markup=reply_markup
                 )
                 
-                # Log the download to LOG_CHANNEL (for logging purposes only)
+                # Log the download to LOG_CHANNEL (for monitoring purposes only)
                 try:
-                    # Send download info message to log channel
-                    await client.send_message(
-                        LOG_CHANNEL,
-                        f"📥 <b>Download:</b> {message.from_user.mention} (ID: {message.from_user.id}) downloaded file:\n"
-                        f"📁 <b>File:</b> <code>{file_name}</code>\n"
-                        f"📦 <b>Size:</b> {get_size(file_size)}\n"
-                        f"🤖 <b>Bot:</b> {client.me.first_name}"
-                    )
+                    log_text = (f"📥 <b>Download:</b> {message.from_user.mention} (ID: {message.from_user.id}) downloaded file:\n"
+                               f"📁 <b>File:</b> <code>{file_name}</code>\n"
+                               f"📦 <b>Size:</b> {get_size(file_size)}\n"
+                               f"🤖 <b>Bot:</b> {client.me.first_name}")
+                    
+                    # If we have a log_msg from stream mode, reply to it, otherwise send new message
+                    if log_msg:
+                        await log_msg.reply_text(log_text)
+                    else:
+                        await client.send_message(LOG_CHANNEL, log_text)
+                        
                 except Exception as log_error:
                     logger.error(f"Download logging failed: {log_error}")
 
