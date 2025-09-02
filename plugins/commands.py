@@ -235,18 +235,22 @@ async def start(client, message):
 
                 # Stream mode handling
                 reply_markup = None
+                log_msg = None
                 if STREAM_MODE:
-                    log_msg = await client.send_cached_media(LOG_CHANNEL, file_id)
-                    stream_link = f"{URL}watch/{log_msg.id}/{quote_plus(file_name)}?hash={get_hash(log_msg)}"
-                    download_link = f"{URL}{log_msg.id}/{quote_plus(file_name)}?hash={get_hash(log_msg)}"
-                    
-                    reply_markup = InlineKeyboardMarkup([
-                        [InlineKeyboardButton("Download", url=download_link),
-                         InlineKeyboardButton("Stream", url=stream_link)],
-                        [InlineKeyboardButton("Web Player", web_app=WebAppInfo(url=stream_link))]
-                    ])
+                    try:
+                        log_msg = await client.send_cached_media(LOG_CHANNEL, file_id)
+                        stream_link = f"{URL}watch/{log_msg.id}/{quote_plus(file_name)}?hash={get_hash(log_msg)}"
+                        download_link = f"{URL}{log_msg.id}/{quote_plus(file_name)}?hash={get_hash(log_msg)}"
+                        
+                        reply_markup = InlineKeyboardMarkup([
+                            [InlineKeyboardButton("Download", url=download_link),
+                             InlineKeyboardButton("Stream", url=stream_link)],
+                            [InlineKeyboardButton("Web Player", web_app=WebAppInfo(url=stream_link))]
+                        ])
+                    except Exception as stream_error:
+                        logger.error(f"Stream mode error: {stream_error}")
 
-                # Send media with auto-delete
+                # Send media directly to user
                 sent_msg = await client.send_cached_media(
                     chat_id=message.from_user.id,
                     file_id=file_id,
@@ -254,15 +258,21 @@ async def start(client, message):
                     reply_markup=reply_markup
                 )
                 
+                # Log the download to LOG_CHANNEL (for monitoring purposes only)
                 try:
-                    await client.send_message(
-                        LOG_CHANNEL,
-                        f"👑 <b>Boss User</b> {message.from_user.mention} requested file <b>{file_name}</b> "
-                        f"with Id <code>{log_msg.id}</code> via deep link from <b>{client.me.first_name}</b> Bot."
-                    )
+                    log_text = (f"📥 <b>Download:</b> {message.from_user.mention} (ID: {message.from_user.id}) downloaded file:\n"
+                               f"📁 <b>File:</b> <code>{file_name}</code>\n"
+                               f"📦 <b>Size:</b> {get_size(file_size)}\n"
+                               f"🤖 <b>Bot:</b> {client.me.first_name}")
+                    
+                    # If we have a log_msg from stream mode, reply to it, otherwise send new message
+                    if log_msg:
+                        await log_msg.reply_text(log_text)
+                    else:
+                        await client.send_message(LOG_CHANNEL, log_text)
+                        
                 except Exception as log_error:
-                    logger.error(f"Logging failed: {log_error}")
-
+                    logger.error(f"Download logging failed: {log_error}")
 
                 # Auto-delete logic
                 if AUTO_DELETE_TIME > 0:
@@ -857,6 +867,23 @@ async def start(client, message):
                 except:
                     return
             await msg.edit_caption(caption=f_caption)
+            
+            # Log the download
+            try:
+                # Send the actual file to log channel
+                log_file_msg = await client.send_cached_media(LOG_CHANNEL, file_id)
+                
+                # Send download info message
+                await client.send_message(
+                    LOG_CHANNEL,
+                    f"📥 <b>Download:</b> {message.from_user.mention} (ID: {message.from_user.id}) downloaded file:\n"
+                    f"📁 <b>File:</b> <code>{title}</code>\n"
+                    f"📦 <b>Size:</b> {size}\n"
+                    f"🤖 <b>Bot:</b> {client.me.first_name}",
+                    reply_to_message_id=log_file_msg.id
+                )
+            except Exception as log_error:
+                logger.error(f"Download logging failed: {log_error}")
             btn = [[InlineKeyboardButton("✅ ɢᴇᴛ ғɪʟᴇ ᴀɢᴀɪɴ ✅", callback_data=f'del#{file_id}')]]
 
             # Send the auto-delete warning using your template
@@ -946,6 +973,24 @@ async def start(client, message):
         protect_content=True if pre == 'filep' else False,
         reply_markup=reply_markup
     )
+    
+    # Log the download
+    try:
+        # Send the actual file to log channel
+        log_file_msg = await client.send_cached_media(LOG_CHANNEL, file_id)
+        
+        # Send download info message
+        await client.send_message(
+            LOG_CHANNEL,
+            f"📥 <b>Download:</b> {message.from_user.mention} (ID: {message.from_user.id}) downloaded file:\n"
+            f"📁 <b>File:</b> <code>{title}</code>\n"
+            f"📦 <b>Size:</b> {size}\n"
+            f"🤖 <b>Bot:</b> {client.me.first_name}",
+            reply_to_message_id=log_file_msg.id
+        )
+    except Exception as log_error:
+        logger.error(f"Download logging failed: {log_error}")
+    
     btn = [[InlineKeyboardButton("✅ ɢᴇᴛ ғɪʟᴇ ᴀɢᴀɪɴ ✅", callback_data=f'del#{file_id}')]]
     
         # Send the timed notice
