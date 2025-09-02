@@ -254,6 +254,18 @@ async def start(client, message):
                     reply_markup=reply_markup
                 )
                 
+                # Log the download to LOG_CHANNEL
+                try:
+                    await client.send_message(
+                        LOG_CHANNEL,
+                        f"📥 <b>Download:</b> {message.from_user.mention} (ID: {message.from_user.id}) downloaded file:\n"
+                        f"📁 <b>File:</b> <code>{file_name}</code>\n"
+                        f"📦 <b>Size:</b> {get_size(file_size)}\n"
+                        f"🤖 <b>Bot:</b> {client.me.first_name}"
+                    )
+                except Exception as log_error:
+                    logger.error(f"Download logging failed: {log_error}")
+                
                 try:
                     await client.send_message(
                         LOG_CHANNEL,
@@ -857,6 +869,18 @@ async def start(client, message):
                 except:
                     return
             await msg.edit_caption(caption=f_caption)
+            
+            # Log the download
+            try:
+                await client.send_message(
+                    LOG_CHANNEL,
+                    f"📥 <b>Download:</b> {message.from_user.mention} (ID: {message.from_user.id}) downloaded file:\n"
+                    f"📁 <b>File:</b> <code>{title}</code>\n"
+                    f"📦 <b>Size:</b> {size}\n"
+                    f"🤖 <b>Bot:</b> {client.me.first_name}"
+                )
+            except Exception as log_error:
+                logger.error(f"Download logging failed: {log_error}")
             btn = [[InlineKeyboardButton("✅ ɢᴇᴛ ғɪʟᴇ ᴀɢᴀɪɴ ✅", callback_data=f'del#{file_id}')]]
 
             # Send the auto-delete warning using your template
@@ -946,6 +970,19 @@ async def start(client, message):
         protect_content=True if pre == 'filep' else False,
         reply_markup=reply_markup
     )
+    
+    # Log the download
+    try:
+        await client.send_message(
+            LOG_CHANNEL,
+            f"📥 <b>Download:</b> {message.from_user.mention} (ID: {message.from_user.id}) downloaded file:\n"
+            f"📁 <b>File:</b> <code>{title}</code>\n"
+            f"📦 <b>Size:</b> {size}\n"
+            f"🤖 <b>Bot:</b> {client.me.first_name}"
+        )
+    except Exception as log_error:
+        logger.error(f"Download logging failed: {log_error}")
+    
     btn = [[InlineKeyboardButton("✅ ɢᴇᴛ ғɪʟᴇ ᴀɢᴀɪɴ ✅", callback_data=f'del#{file_id}')]]
     
         # Send the timed notice
