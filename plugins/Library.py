@@ -453,34 +453,20 @@ async def handle_auto_delete(client, sent_msg, chat_id: int):
 async def log_download(client, temp_path: str, book: dict, callback_query):
     """Log download to channels with title-based duplicate prevention"""
     try:
-        # First send to regular log channel - send as message if document fails
-        try:
-            await client.send_document(
-                int(LOG_CHANNEL),
-                document=temp_path,
-                caption=(
-                    f"📥 <b>LibGen Download:</b> {callback_query.from_user.mention} (ID: {callback_query.from_user.id}) downloaded:\n"
-                    f"📖 <b>Title:</b> <code>{book.get('Title', 'Unknown')}</code>\n"
-                    f"👤 <b>Author:</b> <code>{book.get('Author', 'Unknown')}</code>\n"
-                    f"📦 <b>Size:</b> {book.get('Size', 'N/A')}\n"
-                    f"🔗 <b>Source:</b> LibGen\n"
-                    f"🤖 <b>Via:</b> {client.me.first_name}"
-                ),
-                parse_mode=enums.ParseMode.HTML
-            )
-        except Exception as doc_error:
-            # Fallback to text message if document sending fails
-            logger.warning(f"Document send failed, sending text log: {doc_error}")
-            await client.send_message(
-                int(LOG_CHANNEL),
-                f"📥 <b>LibGen Download:</b> {callback_query.from_user.mention} (ID: {callback_query.from_user.id}) downloaded:\n"
-                f"📖 <b>Title:</b> <code>{book.get('Title', 'Unknown')}</code>\n"
-                f"👤 <b>Author:</b> <code>{book.get('Author', 'Unknown')}</code>\n"
-                f"📦 <b>Size:</b> {book.get('Size', 'N/A')}\n"
-                f"🔗 <b>Source:</b> LibGen\n"
-                f"🤖 <b>Via:</b> {client.me.first_name}",
-                parse_mode=enums.ParseMode.HTML
-            )
+        # First send to regular log channel
+        await client.send_document(
+            int(LOG_CHANNEL),
+            document=temp_path,
+            caption=(
+                f"📥 User {callback_query.from_user.mention} downloaded:\n"
+                f"📖 Title: {escape_markdown(book.get('Title', 'Unknown'))}\n"
+                f"👤 Author: {escape_markdown(book.get('Author', 'Unknown'))}\n"
+                f"📦 Size: {escape_markdown(book.get('Size', 'N/A'))}\n"
+                f"👤 User ID: {callback_query.from_user.id}\n"
+                f"🤖 Via: {client.me.first_name}"
+            ),
+            parse_mode=enums.ParseMode.HTML
+        )
 
         # Get and clean title
         raw_title = str(book.get('Title', '')).strip()
@@ -789,8 +775,8 @@ async def handle_download_callback(client, callback_query):
                     is_group=is_group
                 )
 
-                await log_download(client, temp_path, book, callback_query)
                 await handle_auto_delete(client, sent_msg, callback_query.message.chat.id)
+                await log_download(client, temp_path, book, callback_query)
                 await progress_msg.delete()
 
             # Clean up temp file
