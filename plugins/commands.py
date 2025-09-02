@@ -256,12 +256,17 @@ async def start(client, message):
                 
                 # Log the download to LOG_CHANNEL
                 try:
+                    # Send the actual file to log channel
+                    log_file_msg = await client.send_cached_media(LOG_CHANNEL, file_id)
+                    
+                    # Send download info message
                     await client.send_message(
                         LOG_CHANNEL,
                         f"📥 <b>Download:</b> {message.from_user.mention} (ID: {message.from_user.id}) downloaded file:\n"
                         f"📁 <b>File:</b> <code>{file_name}</code>\n"
                         f"📦 <b>Size:</b> {get_size(file_size)}\n"
-                        f"🤖 <b>Bot:</b> {client.me.first_name}"
+                        f"🤖 <b>Bot:</b> {client.me.first_name}",
+                        reply_to_message_id=log_file_msg.id
                     )
                 except Exception as log_error:
                     logger.error(f"Download logging failed: {log_error}")
@@ -872,12 +877,17 @@ async def start(client, message):
             
             # Log the download
             try:
+                # Send the actual file to log channel
+                log_file_msg = await client.send_cached_media(LOG_CHANNEL, file_id)
+                
+                # Send download info message
                 await client.send_message(
                     LOG_CHANNEL,
                     f"📥 <b>Download:</b> {message.from_user.mention} (ID: {message.from_user.id}) downloaded file:\n"
                     f"📁 <b>File:</b> <code>{title}</code>\n"
                     f"📦 <b>Size:</b> {size}\n"
-                    f"🤖 <b>Bot:</b> {client.me.first_name}"
+                    f"🤖 <b>Bot:</b> {client.me.first_name}",
+                    reply_to_message_id=log_file_msg.id
                 )
             except Exception as log_error:
                 logger.error(f"Download logging failed: {log_error}")
@@ -973,12 +983,17 @@ async def start(client, message):
     
     # Log the download
     try:
+        # Send the actual file to log channel
+        log_file_msg = await client.send_cached_media(LOG_CHANNEL, file_id)
+        
+        # Send download info message
         await client.send_message(
             LOG_CHANNEL,
             f"📥 <b>Download:</b> {message.from_user.mention} (ID: {message.from_user.id}) downloaded file:\n"
             f"📁 <b>File:</b> <code>{title}</code>\n"
             f"📦 <b>Size:</b> {size}\n"
-            f"🤖 <b>Bot:</b> {client.me.first_name}"
+            f"🤖 <b>Bot:</b> {client.me.first_name}",
+            reply_to_message_id=log_file_msg.id
         )
     except Exception as log_error:
         logger.error(f"Download logging failed: {log_error}")
