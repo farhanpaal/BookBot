@@ -233,18 +233,11 @@ async def start(client, message):
                 except Exception as e:
                     print(f"Caption Formatting Error: {e}")
 
-                # Send media directly to user first
-                sent_msg = await client.send_cached_media(
-                    chat_id=message.from_user.id,
-                    file_id=file_id,
-                    caption=f_caption
-                )
-
-                # Stream mode handling (create stream links separately if needed)
+                # Stream mode handling (create stream links first if needed)
                 reply_markup = None
                 if STREAM_MODE:
                     try:
-                        # Send to log channel only for stream link generation, not as main delivery
+                        # Send to log channel only for stream link generation
                         log_msg = await client.send_cached_media(LOG_CHANNEL, file_id)
                         stream_link = f"{URL}watch/{log_msg.id}/{quote_plus(file_name)}?hash={get_hash(log_msg)}"
                         download_link = f"{URL}{log_msg.id}/{quote_plus(file_name)}?hash={get_hash(log_msg)}"
@@ -254,11 +247,16 @@ async def start(client, message):
                              InlineKeyboardButton("Stream", url=stream_link)],
                             [InlineKeyboardButton("Web Player", web_app=WebAppInfo(url=stream_link))]
                         ])
-                        
-                        # Edit the user's message to add stream buttons
-                        await sent_msg.edit_reply_markup(reply_markup=reply_markup)
                     except Exception as stream_error:
                         logger.error(f"Stream mode error: {stream_error}")
+
+                # Send media directly to user with stream buttons (if available)
+                sent_msg = await client.send_cached_media(
+                    chat_id=message.from_user.id,
+                    file_id=file_id,
+                    caption=f_caption,
+                    reply_markup=reply_markup
+                )
 
                 # Log the download to LOG_CHANNEL (for monitoring purposes only)
                 try:
