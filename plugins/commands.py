@@ -235,16 +235,19 @@ async def start(client, message):
 
                 # Stream mode handling
                 reply_markup = None
-                if STREAM_MODE:
-                    log_msg = await client.send_cached_media(LOG_CHANNEL, file_id)
-                    stream_link = f"{URL}watch/{log_msg.id}/{quote_plus(file_name)}?hash={get_hash(log_msg)}"
-                    download_link = f"{URL}{log_msg.id}/{quote_plus(file_name)}?hash={get_hash(log_msg)}"
-                    
-                    reply_markup = InlineKeyboardMarkup([
-                        [InlineKeyboardButton("Download", url=download_link),
-                         InlineKeyboardButton("Stream", url=stream_link)],
-                        [InlineKeyboardButton("Web Player", web_app=WebAppInfo(url=stream_link))]
-                    ])
+                if STREAM_MODE and URL:
+                    try:
+                        log_msg = await client.send_cached_media(LOG_CHANNEL, file_id)
+                        stream_link = f"{URL}watch/{log_msg.id}/{quote_plus(file_name)}?hash={get_hash(log_msg)}"
+                        download_link = f"{URL}{log_msg.id}/{quote_plus(file_name)}?hash={get_hash(log_msg)}"
+                        reply_markup = InlineKeyboardMarkup([
+                            [InlineKeyboardButton("Download", url=download_link),
+                             InlineKeyboardButton("Stream", url=stream_link)],
+                            [InlineKeyboardButton("Web Player", web_app=WebAppInfo(url=stream_link))]
+                        ])
+                    except Exception as e:
+                        logger.error(f"Streaming button creation failed: {e}")
+                        reply_markup = None
 
                 # Send media with auto-delete
                 sent_msg = await client.send_cached_media(
@@ -272,11 +275,12 @@ async def start(client, message):
                     logger.error(f"Download logging failed: {log_error}")
                 
                 try:
-                    await client.send_message(
-                        LOG_CHANNEL,
-                        f"👑 <b>Boss User</b> {message.from_user.mention} requested file <b>{file_name}</b> "
-                        f"with Id <code>{log_msg.id}</code> via deep link from <b>{client.me.first_name}</b> Bot."
-                    )
+                    if STREAM_MODE and 'log_msg' in locals():
+                        await client.send_message(
+                            LOG_CHANNEL,
+                            f"👑 <b>Boss User</b> {message.from_user.mention} requested file <b>{file_name}</b> "
+                            f"with Id <code>{log_msg.id}</code> via deep link from <b>{client.me.first_name}</b> Bot."
+                        )
                 except Exception as log_error:
                     logger.error(f"Logging failed: {log_error}")
 
@@ -768,7 +772,7 @@ async def start(client, message):
                         reply_markup=InlineKeyboardMarkup(btn)
                     )
                     return
-            if STREAM_MODE == True:
+            if STREAM_MODE == True and URL:
                 button = [[InlineKeyboardButton('sᴛʀᴇᴀᴍ ᴀɴᴅ ᴅᴏᴡɴʟᴏᴀᴅ', callback_data=f'generate_stream_link:{file_id}')]]
                 reply_markup=InlineKeyboardMarkup(button)
             else:
@@ -968,7 +972,7 @@ async def start(client, message):
                 )
             return
         
-    if STREAM_MODE == True:
+    if STREAM_MODE == True and URL:
         button = [[InlineKeyboardButton('sᴛʀᴇᴀᴍ ᴀɴᴅ ᴅᴏᴡɴʟᴏᴀᴅ', callback_data=f'generate_stream_link:{file_id}')]]
         reply_markup=InlineKeyboardMarkup(button)
     else:
