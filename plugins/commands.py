@@ -118,7 +118,7 @@ async def start(client, message):
             reply_markup=reply_markup,
             parse_mode=enums.ParseMode.HTML
         )
-
+        
         return
 
     # New Base64 URL Handling ==============================================
@@ -128,7 +128,7 @@ async def start(client, message):
             # Base64 decoding with padding
             padded = data + "=" * (-len(data) % 4)
             decoded = base64.urlsafe_b64decode(padded).decode("ascii")
-
+            
             if decoded.startswith("file_"):
                 _, db_message_id = decoded.split("_", 1)
                  # Try primary database channel first
@@ -139,7 +139,7 @@ async def start(client, message):
                     orig_msg = await client.get_messages(SECONDARY_DB_CHANNEL, int(db_message_id))
                     if not orig_msg or (hasattr(orig_msg, "empty") and orig_msg.empty):
                         return await message.reply("❌ File not found in any database")
-
+                    
             if AUTH_CHANNEL:
                 # AUTH_CHANNEL is now a list of ints
                 missing = await is_subscribed(client, message, AUTH_CHANNEL)
@@ -169,11 +169,11 @@ async def start(client, message):
                         try:
                             # Generate verification URL
                             verify_url = await get_token(client, message.from_user.id, f"https://t.me/{temp.U_NAME}?start=")
-
+                            
                             # Validate URL format
                             if not verify_url.startswith(('http://', 'https://')):
                                 verify_url = f"https://{verify_url}"
-
+                            
                             # Create buttons with fallback
                             btn = [
                                 [InlineKeyboardButton("✅ ᴠᴇʀɪғʏ ɴᴏᴡ ✅", url=verify_url)],
@@ -181,7 +181,7 @@ async def start(client, message):
                                     url=VERIFY_TUTORIAL if VERIFY_TUTORIAL.startswith(('http://', 'https://')) 
                                     else "https://t.me/YourChannel")]
                             ]
-
+                            
                             await message.reply_text(
                                 text=text.format(message.from_user.mention),
                                 reply_markup=InlineKeyboardMarkup(btn),
@@ -194,7 +194,7 @@ async def start(client, message):
                                 text=text.format(message.from_user.mention)
                             )
                         return
-
+                                    
 
                             # Handle text messages
                 if not orig_msg.media:
@@ -204,7 +204,7 @@ async def start(client, message):
                         text=orig_msg.text,
                         disable_web_page_preview=True
                     )
-
+                    
                     # Auto-delete logic for text
                     if AUTO_DELETE_TIME > 0:
                         deleter_msg = await message.reply_text(
@@ -233,43 +233,53 @@ async def start(client, message):
                 except Exception as e:
                     print(f"Caption Formatting Error: {e}")
 
-                # Stream mode handling (create stream links first if needed)
+                # Stream mode handling
                 reply_markup = None
                 if STREAM_MODE:
-                    try:
-                        # Send to log channel only for stream link generation
-                        log_msg = await client.send_cached_media(LOG_CHANNEL, file_id)
-                        stream_link = f"{URL}watch/{log_msg.id}/{quote_plus(file_name)}?hash={get_hash(log_msg)}"
-                        download_link = f"{URL}{log_msg.id}/{quote_plus(file_name)}?hash={get_hash(log_msg)}"
+                    log_msg = await client.send_cached_media(LOG_CHANNEL, file_id)
+                    stream_link = f"{URL}watch/{log_msg.id}/{quote_plus(file_name)}?hash={get_hash(log_msg)}"
+                    download_link = f"{URL}{log_msg.id}/{quote_plus(file_name)}?hash={get_hash(log_msg)}"
+                    
+                    reply_markup = InlineKeyboardMarkup([
+                        [InlineKeyboardButton("Download", url=download_link),
+                         InlineKeyboardButton("Stream", url=stream_link)],
+                        [InlineKeyboardButton("Web Player", web_app=WebAppInfo(url=stream_link))]
+                    ])
 
-                        reply_markup = InlineKeyboardMarkup([
-                            [InlineKeyboardButton("Download", url=download_link),
-                             InlineKeyboardButton("Stream", url=stream_link)],
-                            [InlineKeyboardButton("Web Player", web_app=WebAppInfo(url=stream_link))]
-                        ])
-                    except Exception as stream_error:
-                        logger.error(f"Stream mode error: {stream_error}")
-
-                # Send media directly to user with stream buttons (if available)
+                # Send media with auto-delete
                 sent_msg = await client.send_cached_media(
                     chat_id=message.from_user.id,
                     file_id=file_id,
                     caption=f_caption,
                     reply_markup=reply_markup
                 )
-
-                # Log the download to LOG_CHANNEL (for monitoring purposes only)
+                
+                # Log the download to LOG_CHANNEL
                 try:
-                    log_text = (f"📥 <b>Download:</b> {message.from_user.mention} (ID: {message.from_user.id}) downloaded file:\n"
-                               f"📁 <b>File:</b> <code>{file_name}</code>\n"
-                               f"📦 <b>Size:</b> {get_size(file_size)}\n"
-                               f"🤖 <b>Bot:</b> {client.me.first_name}")
-
-                    # Send only the log message to LOG_CHANNEL, not the actual file
-                    await client.send_message(LOG_CHANNEL, log_text)
-
+                    # Send the actual file to log channel
+                    log_file_msg = await client.send_cached_media(LOG_CHANNEL, file_id)
+                    
+                    # Send download info message
+                    await client.send_message(
+                        LOG_CHANNEL,
+                        f"📥 <b>Download:</b> {message.from_user.mention} (ID: {message.from_user.id}) downloaded file:\n"
+                        f"📁 <b>File:</b> <code>{file_name}</code>\n"
+                        f"📦 <b>Size:</b> {get_size(file_size)}\n"
+                        f"🤖 <b>Bot:</b> {client.me.first_name}",
+                        reply_to_message_id=log_file_msg.id
+                    )
                 except Exception as log_error:
                     logger.error(f"Download logging failed: {log_error}")
+                
+                try:
+                    await client.send_message(
+                        LOG_CHANNEL,
+                        f"👑 <b>Boss User</b> {message.from_user.mention} requested file <b>{file_name}</b> "
+                        f"with Id <code>{log_msg.id}</code> via deep link from <b>{client.me.first_name}</b> Bot."
+                    )
+                except Exception as log_error:
+                    logger.error(f"Logging failed: {log_error}")
+
 
                 # Auto-delete logic
                 if AUTO_DELETE_TIME > 0:
@@ -277,7 +287,7 @@ async def start(client, message):
                     await asyncio.sleep(AUTO_DELETE_TIME)
                     await sent_msg.delete()
                     await deleter_msg.edit_text(script.FILE_DELETED_MSG)
-
+                    
                 return
 
         except (binascii.Error, ValueError) as e:
@@ -530,7 +540,7 @@ async def start(client, message):
 
         await sts.delete()
 
-
+    
         k = await client.send_message(
         chat_id=message.from_user.id,
         text=script.AUTO_DELETE_MSG.format(AUTO_DELETE_MIN),
@@ -649,32 +659,32 @@ async def start(client, message):
             parts = data.split("-", 2)  # Split into max 3 parts
             if len(parts) != 3:
                 raise ValueError("Invalid verification format")
-
+            
             userid = parts[1]
             token = parts[2]
-
+            
             # Validate user match
             if str(message.from_user.id) != str(userid):
                 await message.reply_text("<b>Invalid link or expired link</b>", protect_content=True)
                 return  # Stop execution here
-
+            
             # Check token validity
             if not await check_token(client, userid, token):
                 await message.reply_text("<b>Invalid link or expired link</b>", protect_content=True)
                 return
-
+            
             # Verification successful
             text = (f"<b>ʜᴇʏ {message.from_user.mention} 👋,\n\n"
                     "ʏᴏᴜ ʜᴀᴠᴇ ᴄᴏᴍᴘʟᴇᴛᴇᴅ ᴛʜᴇ ᴠᴇʀɪꜰɪᴄᴀᴛɪᴏɴ...\n\n"
                     "ɴᴏᴡ ʏᴏᴜ ʜᴀᴠᴇ ᴜɴʟɪᴍɪᴛᴇᴅ ᴀᴄᴄᴇss ᴛᴏᴅᴀʏ ~ ᴇɴᴊᴏʏ\n\n</b>")
-
+            
             if PREMIUM_AND_REFERAL_MODE:
                 text += ("<b>ɪғ ʏᴏᴜ ᴡᴀɴᴛ ᴅɪʀᴇᴄᴛ ғɪʟᴇꜱ ᴡɪᴛʜᴏᴜᴛ ᴀɴʏ ᴠᴇʀɪғɪᴄᴀᴛɪᴏɴꜱ ᴛʜᴇɴ ʙᴜʏ ʙᴏᴛ ꜱᴜʙꜱᴄʀɪᴘᴛɪᴏɴ ☺️\n\n"
                         "💶 ꜱᴇɴᴅ /plan ᴛᴏ ʙᴜʏ ꜱᴜʙꜱᴄʀɪᴘᴛɪᴏɴ</b>")
-
+            
             await message.reply_text(text, protect_content=True)
             await verify_user(client, userid, token)
-
+            
             # CRUCIAL: Prevent further processing
             return  
 
@@ -745,7 +755,7 @@ async def start(client, message):
             if not await db.has_premium_access(message.from_user.id):
                 if not await check_verification(client, message.from_user.id) and VERIFY == True:
                     btn = [[
-                        InlineKeyboardButton("ᴠᴇʀɪғʏ", url=await get_token(client, message.from_user.id, f"https://t.me/{temp.U_NAME}?start="))
+                        InlineKeyboardButton("ᴠᴇʀɪғʏ", url=await get_token(client, message.from_user.id, f"https://telegram.me/{temp.U_NAME}?start="))
                     ],[
                         InlineKeyboardButton("ʜᴏᴡ ᴛᴏ ᴠᴇʀɪғʏ", url=VERIFY_TUTORIAL)
                     ]]
@@ -791,7 +801,7 @@ async def start(client, message):
             except:
                 pass
 
-        # Edit the warning into the “deleted” confirmation
+        # Edit the original warning into the “deleted” confirmation
         await k.edit_text(
             script.FILE_DELETED_MSG,
             parse_mode=enums.ParseMode.HTML
@@ -829,7 +839,7 @@ async def start(client, message):
             if not await db.has_premium_access(message.from_user.id):
                 if not await check_verification(client, message.from_user.id) and VERIFY == True:
                     btn = [[
-                        InlineKeyboardButton("ᴠᴇʀɪғʏ", url=await get_token(client, message.from_user.id, f"https://t.me/{temp.U_NAME}?start="))
+                        InlineKeyboardButton("ᴠᴇʀɪғʏ", url=await get_token(client, message.from_user.id, f"https://telegram.me/{temp.U_NAME}?start="))
                     ],[
                         InlineKeyboardButton("ʜᴏᴡ ᴛᴏ ᴠᴇʀɪғʏ", url=VERIFY_TUTORIAL)
                     ]]
@@ -864,12 +874,12 @@ async def start(client, message):
                 except:
                     return
             await msg.edit_caption(caption=f_caption)
-
+            
             # Log the download
             try:
                 # Send the actual file to log channel
                 log_file_msg = await client.send_cached_media(LOG_CHANNEL, file_id)
-
+                
                 # Send download info message
                 await client.send_message(
                     LOG_CHANNEL,
@@ -904,10 +914,10 @@ async def start(client, message):
             )
 
             return
-
+        
         except:
             pass
-        return await message.reply_text("No such file exist.")
+        return await message.reply('No such file exist.')
     files = files_
     title = files["file_name"]
     size=get_size(files["file_size"])
@@ -922,9 +932,9 @@ async def start(client, message):
 
     if not await db.has_premium_access(message.from_user.id):
         if not await check_verification(client, message.from_user.id) and VERIFY == True:
-
+            
             btn = [[
-                InlineKeyboardButton("ᴠᴇʀɪғʏ", url=await get_token(client, message.from_user.id, f"https://t.me/{temp.U_NAME}?start="))
+                InlineKeyboardButton("ᴠᴇʀɪғʏ", url=await get_token(client, message.from_user.id, f"https://telegram.me/{temp.U_NAME}?start="))
             ],[
                 InlineKeyboardButton("ʜᴏᴡ ᴛᴏ ᴠᴇʀɪғʏ", url=VERIFY_TUTORIAL)
             ]]
@@ -935,15 +945,15 @@ async def start(client, message):
 
             # Safely build buttons
             try:
-                verify_url = await get_token(client, message.from_user.id, f"https://t.me/{temp.U_NAME}?start=")
+                verify_url = await get_token(client, message.from_user.id, f"https://telegram.me/{temp.U_NAME}?start=")
                 if not verify_url.startswith(('http://', 'https://')):
                     verify_url = f"https://{verify_url}"
-
+                    
                 btn = [
                     [InlineKeyboardButton("ᴠᴇʀɪғʏ", url=verify_url)],
                     [InlineKeyboardButton("ʜᴏᴡ ᴛᴏ ᴠᴇʀɪғʏ", url=VERIFY_TUTORIAL if VERIFY_TUTORIAL.startswith(('http://', 'https://')) else "https://example.com")]
                 ]
-
+                
                 await message.reply_text(
                     text=text.format(message.from_user.mention),
                     protect_content=True,
@@ -957,7 +967,7 @@ async def start(client, message):
                     protect_content=True
                 )
             return
-
+        
     if STREAM_MODE == True:
         button = [[InlineKeyboardButton('sᴛʀᴇᴀᴍ ᴀɴᴅ ᴅᴏᴡɴʟᴏᴀᴅ', callback_data=f'generate_stream_link:{file_id}')]]
         reply_markup=InlineKeyboardMarkup(button)
@@ -970,12 +980,12 @@ async def start(client, message):
         protect_content=True if pre == 'filep' else False,
         reply_markup=reply_markup
     )
-
+    
     # Log the download
     try:
         # Send the actual file to log channel
         log_file_msg = await client.send_cached_media(LOG_CHANNEL, file_id)
-
+        
         # Send download info message
         await client.send_message(
             LOG_CHANNEL,
@@ -987,9 +997,9 @@ async def start(client, message):
         )
     except Exception as log_error:
         logger.error(f"Download logging failed: {log_error}")
-
+    
     btn = [[InlineKeyboardButton("✅ ɢᴇᴛ ғɪʟᴇ ᴀɢᴀɪɴ ✅", callback_data=f'del#{file_id}')]]
-
+    
         # Send the timed notice
     k = await msg.reply(
         text=script.AUTO_DELETE_MSG.format(AUTO_DELETE_MIN),
@@ -1057,7 +1067,7 @@ async def delete(bot, message):
     else:
         await msg.edit('This is not supported file format')
         return
-
+    
     file_id, file_ref = unpack_new_file_id(media.file_id)
 
     result = col.delete_one({
@@ -1075,7 +1085,7 @@ async def delete(bot, message):
         for char in unwanted_chars:
             file_name = file_name.replace(char, '')
         file_name = ' '.join(filter(lambda x: not x.startswith('@'), file_name.split()))
-
+    
         result = col.delete_many({
             'file_name': file_name,
             'file_size': media.file_size
@@ -1164,7 +1174,7 @@ async def settings(client, message):
             and str(userid) not in ADMINS
     ):
         return
-
+    
     settings = await get_settings(grp_id)
 
     try:
@@ -1372,7 +1382,7 @@ async def requests(bot, message):
         except Exception as e:
             await message.reply_text(f"Error: {e}")
             pass
-
+        
     elif message.text:
         chat_id = message.chat.id
         reporter = str(message.from_user.id)
@@ -1410,7 +1420,7 @@ async def requests(bot, message):
 
     else:
         success = False
-
+    
     if success:
         link = await bot.create_chat_invite_link(int(REQST_CHANNEL))
         btn = [[
@@ -1478,7 +1488,7 @@ async def shortlink(bot, message):
         return await message.reply(f"You are anonymous admin. Turn off anonymous admin and try again this command")
     chat_type = message.chat.type
     if chat_type == enums.ChatType.PRIVATE:
-        return await message.reply_text(f"<b>Hey {message.from_user.mention}, This Command Only Works in groups!\n\nFollow These Steps to Connect Shortener:\n\n1. Add Me in Your Group with Full Admin Rights\n\n2. After Adding in Grp, Set your Shortener\n\nSend this command in your group\n\n—> /shortlink \"{your_shortener_website_name} {your_shortener_api}\n\n#Sample:-\n/shortlink kpslink.in CAACAgUAAxkBAAEJ4GtkyPgEzpIUC_DSmirN6eFWp4KInAACsQoAAoHSSFYub2D15dGHfy8E\n\nThat's it!!! Enjoy Earning Money 💲\n\n[[[ Trusted Earning Site - https://kpslink.in]]]\n\nIf you have any Doubts, Feel Free to Ask me - @tactition\n\n</b>")
+        return await message.reply_text(f"<b>Hey {message.from_user.mention}, This command only works on groups !\n\n<u>Follow These Steps to Connect Shortener:</u>\n\n1. Add Me in Your Group with Full Admin Rights\n\n2. After Adding in Grp, Set your Shortener\n\nSend this command in your group\n\n—> /shortlink ""{your_shortener_website_name} {your_shortener_api}\n\n#Sample:-\n/shortlink kpslink.in CAACAgUAAxkBAAEJ4GtkyPgEzpIUC_DSmirN6eFWp4KInAACsQoAAoHSSFYub2D15dGHfy8E\n\nThat's it!!! Enjoy Earning Money 💲\n\n[[[ Trusted Earning Site - https://kpslink.in]]]\n\nIf you have any Doubts, Feel Free to Ask me - @tactition\n\n</b>")
     elif chat_type in [enums.ChatType.GROUP, enums.ChatType.SUPERGROUP]:
         grpid = message.chat.id
         title = message.chat.title
@@ -1832,28 +1842,29 @@ async def premium_users_info(client, message):
             expiry = data.get("expiry_time")
             expiry_ist = expiry.astimezone(pytz.timezone("Asia/Kolkata"))
             current_time = datetime.datetime.now(pytz.timezone("Asia/Kolkata"))
-
+            
             if current_time > expiry_ist:
                 await db.remove_premium_access(user['id'])  # Remove premium access if expired
                 continue  # Skip the user if their expiry time has passed
-
+                
             expiry_str_in_ist = expiry_ist.strftime("%d-%m-%Y")
             expiry_time_in_ist = expiry_ist.strftime("%I:%M:%S %p")
             time_left = expiry_ist - current_time
-
+            
             days = time_left.days
             hours, remainder = divmod(time_left.seconds, 3600)
             minutes, seconds = divmod(remainder, 60)
             time_left_str = f"{days} ᴅᴀʏꜱ, {hours} ʜᴏᴜʀꜱ, {minutes} ᴍɪɴᴜᴛᴇꜱ, {seconds} ꜱᴇᴄᴏɴᴅꜱ"
-
+            
             new += f"{user_count}. {(await client.get_users(user['id'])).mention}\n👤 ᴜꜱᴇʀ ɪᴅ : <code>{user['id']}</code>\n⏱️ ᴇxᴘɪʀᴇᴅ ᴅᴀᴛᴇ : {expiry_str_in_ist}\n⏱️ ᴇxᴘɪʀᴇᴅ ᴛɪᴍᴇ : {expiry_time_in_ist}\n⏳ ʀᴇᴍᴀɪɴɪɴɢ ᴛɪᴍᴇ : {time_left_str}\n\n"
             user_count += 1
         else:
             pass
-
+    
     try:
         await message.reply(new)
     except MessageTooLong:
         with open('premium_users_info.txt', 'w+') as outfile:
             outfile.write(new)
         await message.reply_document('premium_users_info.txt', caption="Premium Users Information:")
+
