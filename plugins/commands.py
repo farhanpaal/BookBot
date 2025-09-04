@@ -74,7 +74,7 @@ async def start(client, message):
                 InlineKeyboardButton('Books Channel', url=GRP_LNK)
             ],
              [
-                InlineKeyboardButton('Sᴜᴘᴘᴏʀᴛ', url=f'https://t.me/{SUPPORT_CHAT}'),
+                InlineKeyboardButton('Sᴜᴘᴘᴏʀᴛ', url='https://variabletribe.com/support-us/'),
                 # InlineKeyboardButton('ʜᴇʟᴘ', callback_data='help'),
                 InlineKeyboardButton('ᴀʙᴏᴜᴛ', url='https://variabletribe.com')
             ],
@@ -97,7 +97,7 @@ async def start(client, message):
                 InlineKeyboardButton('Books Channel', url=GRP_LNK)
             ],
             [
-                InlineKeyboardButton('Sᴜᴘᴘᴏʀᴛ', url=f'https://t.me/{SUPPORT_CHAT}'),
+                InlineKeyboardButton('Sᴜᴘᴘᴏʀᴛ', url='https://variabletribe.com/support-us/'),
                 # InlineKeyboardButton('ʜᴇʟᴘ', callback_data='help'),
                 InlineKeyboardButton('ᴀʙᴏᴜᴛ', url='https://variabletribe.com')
             ],
@@ -356,7 +356,7 @@ async def start(client, message):
             ],
              [
                 # InlineKeyboardButton('ʜᴇʟᴘ', callback_data='help'),
-                InlineKeyboardButton('Sᴜᴘᴘᴏʀᴛ', url=f'https://t.me/{SUPPORT_CHAT}'),
+                InlineKeyboardButton('Sᴜᴘᴘᴏʀᴛ', url='https://variabletribe.com/support-us/'),
                 InlineKeyboardButton('ᴀʙᴏᴜᴛ', url='https://variabletribe.com')
             ],
             [
@@ -377,7 +377,7 @@ async def start(client, message):
                 InlineKeyboardButton('Books Channel', url=GRP_LNK)
             ],
             [
-                InlineKeyboardButton('Sᴜᴘᴘᴏʀᴛ', url=f'https://t.me/{SUPPORT_CHAT}'),
+                InlineKeyboardButton('Sᴜᴘᴘᴏʀᴛ', url='https://variabletribe.com/support-us/'),
                 # InlineKeyboardButton('ʜᴇʟᴘ', callback_data='help'),
                 InlineKeyboardButton('ᴀʙᴏᴜᴛ', url='https://variabletribe.com')
             ],
@@ -426,7 +426,7 @@ async def start(client, message):
                 ],
                 [
                     # InlineKeyboardButton('ʜᴇʟᴘ', callback_data='help'),
-                    InlineKeyboardButton('Sᴜᴘᴘᴏʀᴛ', url=f'https://t.me/{SUPPORT_CHAT}'),
+                    InlineKeyboardButton('Sᴜᴘᴘᴏʀᴛ', url='https://variabletribe.com/support-us/'),
                     InlineKeyboardButton('ᴀʙᴏᴜᴛ', url='https://variabletribe.com')
                 ],
                 [
@@ -447,7 +447,7 @@ async def start(client, message):
                     InlineKeyboardButton('Books Channel', url=GRP_LNK)
                 ],
                 [
-                    InlineKeyboardButton('Sᴜᴘᴘᴏʀᴛ', url=f'https://t.me/{SUPPORT_CHAT}'),
+                    InlineKeyboardButton('Sᴜᴘᴘᴏʀᴛ', url='https://variabletribe.com/support-us/'),
                     # InlineKeyboardButton('ʜᴇʟᴘ', callback_data='help'),
                     InlineKeyboardButton('ᴀʙᴏᴜᴛ', url='https://variabletribe.com')
                 ],
@@ -683,8 +683,7 @@ async def start(client, message):
                     "ɴᴏᴡ ʏᴏᴜ ʜᴀᴠᴇ ᴜɴʟɪᴍɪᴛᴇᴅ ᴀᴄᴄᴇss ᴛᴏᴅᴀʏ ~ ᴇɴᴊᴏʏ\n\n</b>")
             
             if PREMIUM_AND_REFERAL_MODE:
-                text += ("<b>ɪғ ʏᴏᴜ ᴡᴀɴᴛ ᴅɪʀᴇᴄᴛ ғɪʟᴇꜱ ᴡɪᴛʜᴏᴜᴛ ᴀɴʏ ᴠᴇʀɪғɪᴄᴀᴛɪᴏɴꜱ ᴛʜᴇɴ ʙᴜʏ ʙᴏᴛ ꜱᴜʙꜱᴄʀɪᴘᴛɪᴏɴ ☺️\n\n"
-                        "💶 ꜱᴇɴᴅ /plan ᴛᴏ ʙᴜʏ ꜱᴜʙꜱᴄʀɪᴘᴛɪᴏɴ</b>")
+                text += ("<b>ɪғ ʏᴏᴜ ᴡᴀɴᴛ ᴅɪʀᴇᴄᴛ ғɪʟᴇꜱ ᴡɪᴛʜᴏᴜᴛ ᴀɴʏ ᴠᴇʀɪғɪᴄᴀᴛɪᴏɴꜱ ᴛʜᴇɴ ʙᴜʏ ʙᴏᴛ ꜱᴜʙꜱᴄʀɪᴘᴛɪᴏɴ ☺️\n\n💶 ꜱᴇɴᴅ /plan ᴛᴏ ʙᴜʏ ꜱᴜʙꜱᴄʀɪᴘᴛɪᴏɴ</b>")
             
             await message.reply_text(text, protect_content=True)
             await verify_user(client, userid, token)
