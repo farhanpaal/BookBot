@@ -34,8 +34,11 @@ async def safe_answer_callback(callback_query, text, show_alert=False):
         return False
     
 # Initialize LibgenSearch instance with mirror rotation
+# Prefer faster/more reliable mirrors first. Move 'gs' to the end.
+MIRROR_ORDER = ["li", "st", "lc", "bz", "la", "gs"]
+
 def init_libgen():
-    mirrors = ["li", "gs", "st", "lc", "bz","la"]  # Available mirrors
+    mirrors = MIRROR_ORDER  # Available mirrors in preferred order
     for mirror in mirrors:
         try:
             lg = LibgenSearch(mirror=mirror)
@@ -89,74 +92,74 @@ def run_sync(func, *args, **kwargs):
     return asyncio.get_event_loop().run_in_executor(executor, lambda: func(*args, **kwargs))
 
 async def libgen_search(query: str):
-    """Search LibGen with deduplication and title validation"""
-    # return []
-    search_methods = [
-        lg.search_default,
-        lg.search_title,
-        lg.search_author
-    ]
-    
+    """Search LibGen with deduplication and title validation, rotating mirrors on failure/empty results"""
+    async def search_with_instance(lg_instance):
+        methods = [lg_instance.search_default, lg_instance.search_title, lg_instance.search_author]
+        tasks = [run_sync(method, query) for method in methods]
+        return await asyncio.gather(*tasks, return_exceptions=True), methods
+
+    def process_results(results_list, methods, seen_ids, out_list):
+        for idx, results in enumerate(results_list):
+            method = methods[idx]
+            if isinstance(results, Exception):
+                logger.warning(f"Search method {method.__name__} failed: {str(results)}")
+                continue
+            if results and isinstance(results, list) and len(results) > 0:
+                logger.info(f"Found {len(results)} results via {method.__name__}")
+                for book in results:
+                    try:
+                        book_id = getattr(book, 'id', None) or getattr(book, 'md5', None)
+                        if not book_id or book_id in seen_ids:
+                            continue
+                        seen_ids.add(book_id)
+                        title = getattr(book, 'title', '') or getattr(book, 'Title', '')
+                        if not title.strip():
+                            continue
+                        bm = getattr(book, 'mirrors', []) or getattr(book, 'Mirrors', [])
+                        formatted = {
+                            'ID': book_id,
+                            'Title': title,
+                            'Author': getattr(book, 'author', '') or getattr(book, 'Author', 'Unknown Author'),
+                            'Publisher': getattr(book, 'publisher', '') or getattr(book, 'Publisher', ''),
+                            'Year': getattr(book, 'year', '') or getattr(book, 'Year', ''),
+                            'Language': getattr(book, 'language', '') or getattr(book, 'Language', ''),
+                            'Pages': getattr(book, 'pages', '') or getattr(book, 'Pages', ''),
+                            'Size': getattr(book, 'size', '') or getattr(book, 'Size', ''),
+                            'Extension': getattr(book, 'extension', '') or getattr(book, 'Extension', ''),
+                            'MD5': getattr(book, 'md5', '') or getattr(book, 'MD5', ''),
+                            'Mirror_1': bm[0] if len(bm) > 0 else "",
+                            'Mirror_2': bm[1] if len(bm) > 1 else "",
+                            'Mirror_3': bm[2] if len(bm) > 2 else "",
+                            'Mirror_4': bm[3] if len(bm) > 3 else "",
+                            'RawBook': book
+                        }
+                        out_list.append(formatted)
+                    except Exception as e:
+                        logger.error(f"Error processing book: {e}", exc_info=True)
+
     all_results = []
     seen_ids = set()
-    
-    # Run all search methods concurrently
-    tasks = [run_sync(method, query) for method in search_methods]
-    results_list = await asyncio.gather(*tasks, return_exceptions=True)
-    
-    for idx, results in enumerate(results_list):
-        method = search_methods[idx]
-        if isinstance(results, Exception):
-            logger.warning(f"Search method {method.__name__} failed: {str(results)}")
-            continue
-            
-        if results and isinstance(results, list) and len(results) > 0:
-            logger.info(f"Found {len(results)} results via {method.__name__}")
-            
-            # Process and filter results
-            for book in results:
-                try:
-                    # Get unique ID for deduplication
-                    book_id = getattr(book, 'id', None) or getattr(book, 'md5', None)
-                    if not book_id:
-                        continue
-                        
-                    # Skip duplicates across all search methods
-                    if book_id in seen_ids:
-                        continue
-                    seen_ids.add(book_id)
-                    
-                    # Skip entries without a title
-                    title = getattr(book, 'title', '') or getattr(book, 'Title', '')
-                    if not title.strip():
-                        continue
-                        
-                    # Robust attribute access with fallbacks
-                    mirrors = getattr(book, 'mirrors', []) or getattr(book, 'Mirrors', [])
-                    
-                    # Only resolve download links when actually needed (in callback)
-                    formatted = {
-                        'ID': book_id,
-                        'Title': title,
-                        'Author': getattr(book, 'author', '') or getattr(book, 'Author', 'Unknown Author'),
-                        'Publisher': getattr(book, 'publisher', '') or getattr(book, 'Publisher', ''),
-                        'Year': getattr(book, 'year', '') or getattr(book, 'Year', ''),
-                        'Language': getattr(book, 'language', '') or getattr(book, 'Language', ''),
-                        'Pages': getattr(book, 'pages', '') or getattr(book, 'Pages', ''),
-                        'Size': getattr(book, 'size', '') or getattr(book, 'Size', ''),
-                        'Extension': getattr(book, 'extension', '') or getattr(book, 'Extension', ''),
-                        'MD5': getattr(book, 'md5', '') or getattr(book, 'MD5', ''),
-                        'Mirror_1': mirrors[0] if len(mirrors) > 0 else "",
-                        'Mirror_2': mirrors[1] if len(mirrors) > 1 else "",
-                        'Mirror_3': mirrors[2] if len(mirrors) > 2 else "",
-                        'Mirror_4': mirrors[3] if len(mirrors) > 3 else "",
-                        'RawBook': book  # Store raw book object for later resolution
-                    }
-                    all_results.append(formatted)
-                except Exception as e:
-                    logger.error(f"Error processing book: {e}", exc_info=True)
-                    continue
-    
+
+    # First, try with the initialized instance
+    try:
+        results_list, methods = await search_with_instance(lg)
+        process_results(results_list, methods, seen_ids, all_results)
+    except Exception as e:
+        logger.warning(f"Primary LibGen instance failed: {e}")
+
+    # If no results, rotate mirrors per request
+    if not all_results:
+        for mirror in MIRROR_ORDER:
+            try:
+                alt = LibgenSearch(mirror=mirror)
+                results_list, methods = await search_with_instance(alt)
+                process_results(results_list, methods, seen_ids, all_results)
+                if all_results:
+                    logger.info(f"Recovered LibGen results via mirror: {mirror}")
+                    break
+            except Exception as e:
+                logger.warning(f"Mirror {mirror} search failed: {e}")
+
     return all_results
 
 async def create_search_buttons(results: list, search_key: str, page: int):
