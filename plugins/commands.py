@@ -76,7 +76,7 @@ async def start(client, message):
              [
                 InlineKeyboardButton('Sᴜᴘᴘᴏʀᴛ', url=f'https://t.me/{SUPPORT_CHAT}'),
                 # InlineKeyboardButton('ʜᴇʟᴘ', callback_data='help'),
-                InlineKeyboardButton('ᴀʙᴏᴜᴛ', callback_data='about')
+                InlineKeyboardButton('ᴀʙᴏᴜᴛ', url='https://variabletribe.com')
             ],
             [
                 # InlineKeyboardButton('ᴇᴀʀɴ ᴍᴏɴᴇʏ', callback_data="shortlink_info"),
@@ -99,7 +99,7 @@ async def start(client, message):
             [
                 InlineKeyboardButton('Sᴜᴘᴘᴏʀᴛ', url=f'https://t.me/{SUPPORT_CHAT}'),
                 # InlineKeyboardButton('ʜᴇʟᴘ', callback_data='help'),
-                InlineKeyboardButton('ᴀʙᴏᴜᴛ', callback_data='about')
+                InlineKeyboardButton('ᴀʙᴏᴜᴛ', url='https://variabletribe.com')
             ],
             # [
             #     InlineKeyboardButton('ᴇᴀʀɴ ᴍᴏɴᴇʏ', callback_data="shortlink_info"),
@@ -144,7 +144,7 @@ async def start(client, message):
                 # AUTH_CHANNEL is now a list of ints
                 missing = await is_subscribed(client, message, AUTH_CHANNEL)
                 if missing:
-                    # append “Try Again” button
+                    # append "Try Again" button
                     username = (await client.get_me()).username
                     param    = message.command[1] if len(message.command)>1 else "true"
                     missing.append([
@@ -357,7 +357,7 @@ async def start(client, message):
              [
                 # InlineKeyboardButton('ʜᴇʟᴘ', callback_data='help'),
                 InlineKeyboardButton('Sᴜᴘᴘᴏʀᴛ', url=f'https://t.me/{SUPPORT_CHAT}'),
-                InlineKeyboardButton('ᴀʙᴏᴜᴛ', callback_data='about')
+                InlineKeyboardButton('ᴀʙᴏᴜᴛ', url='https://variabletribe.com')
             ],
             [
                 # InlineKeyboardButton('ᴇᴀʀɴ ᴍᴏɴᴇʏ', callback_data="shortlink_info"),
@@ -379,7 +379,7 @@ async def start(client, message):
             [
                 InlineKeyboardButton('Sᴜᴘᴘᴏʀᴛ', url=f'https://t.me/{SUPPORT_CHAT}'),
                 # InlineKeyboardButton('ʜᴇʟᴘ', callback_data='help'),
-                InlineKeyboardButton('ᴀʙᴏᴜᴛ', callback_data='about')
+                InlineKeyboardButton('ᴀʙᴏᴜᴛ', url='https://variabletribe.com')
             ],
             [
                 InlineKeyboardButton('ᴇᴀʀɴ ᴍᴏɴᴇʏ', callback_data="shortlink_info"),
@@ -427,7 +427,7 @@ async def start(client, message):
                 [
                     # InlineKeyboardButton('ʜᴇʟᴘ', callback_data='help'),
                     InlineKeyboardButton('Sᴜᴘᴘᴏʀᴛ', url=f'https://t.me/{SUPPORT_CHAT}'),
-                    InlineKeyboardButton('ᴀʙᴏᴜᴛ', callback_data='about')
+                    InlineKeyboardButton('ᴀʙᴏᴜᴛ', url='https://variabletribe.com')
                 ],
                 [
                     # InlineKeyboardButton('ᴇᴀʀɴ ᴍᴏɴᴇʏ', callback_data="shortlink_info"),
@@ -449,7 +449,7 @@ async def start(client, message):
                 [
                     InlineKeyboardButton('Sᴜᴘᴘᴏʀᴛ', url=f'https://t.me/{SUPPORT_CHAT}'),
                     # InlineKeyboardButton('ʜᴇʟᴘ', callback_data='help'),
-                    InlineKeyboardButton('ᴀʙᴏᴜᴛ', callback_data='about')
+                    InlineKeyboardButton('ᴀʙᴏᴜᴛ', url='https://variabletribe.com')
                 ],
                 # [
                 #     InlineKeyboardButton('ᴇᴀʀɴ ᴍᴏɴᴇʏ', callback_data="shortlink_info"),
@@ -561,7 +561,7 @@ async def start(client, message):
             except:
                 pass
 
-        # Edit the original notice to the “successfully deleted” template
+        # Edit the original notice to the "successfully deleted" template
         await k.edit_text(
             script.FILE_DELETED_MSG,
             parse_mode=enums.ParseMode.HTML
@@ -805,7 +805,7 @@ async def start(client, message):
             except:
                 pass
 
-        # Edit the original warning into the “deleted” confirmation
+        # Edit the original warning into the "deleted" confirmation
         await k.edit_text(
             script.FILE_DELETED_MSG,
             parse_mode=enums.ParseMode.HTML
@@ -907,10 +907,10 @@ async def start(client, message):
             # Wait the configured duration
             await asyncio.sleep(AUTO_DELETE_TIME)
 
-            # Delete the user’s original message
+            # Delete the user's original message
             await msg.delete()
 
-            # Edit the warning into the “deleted” notice, and attach the retry button
+            # Edit the warning into the "deleted" notice, and attach the retry button
             await k.edit_text(
                 script.FILE_DELETED_MSG + "\n\nIf you want it again, click below:",
                 reply_markup=InlineKeyboardMarkup(btn),
