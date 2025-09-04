@@ -72,8 +72,8 @@ async def auto_approve(client, message: ChatJoinRequest):
                     InlineKeyboardButton('ʙᴏᴏᴋs Cʜᴀɴɴᴇʟ', url=GRP_LNK)
                 ],[
                     # InlineKeyboardButton('ʜᴇʟᴘ', callback_data='help'),
-                    InlineKeyboardButton('Sᴜᴘᴘᴏʀᴛ', url=f'https://t.me/{SUPPORT_CHAT}'),
-                    InlineKeyboardButton('ᴀʙᴏᴜᴛ', callback_data='about')
+                    InlineKeyboardButton('Sᴜᴘᴘᴏʀᴛ', url='https://variabletribe.com/support-us/'),
+                    InlineKeyboardButton('ᴀʙᴏᴜᴛ', url='https://variabletribe.com')
                 ],[
                     InlineKeyboardButton('ᴘʀᴇᴍɪᴜᴍ ᴀɴᴅ ʀᴇғᴇʀʀᴀʟ', callback_data='subscription')
                 ]]
@@ -88,8 +88,8 @@ async def auto_approve(client, message: ChatJoinRequest):
                     InlineKeyboardButton('ʙᴏᴏᴋs Cʜᴀɴɴᴇʟ', url=GRP_LNK)
                 ],[
                     # InlineKeyboardButton('ʜᴇʟᴘ', callback_data='help'),
-                    InlineKeyboardButton('Sᴜᴘᴘᴏʀᴛ', url=f'https://t.me/{SUPPORT_CHAT}'),
-                    InlineKeyboardButton('ᴀʙᴏᴜᴛ', callback_data='about')
+                    InlineKeyboardButton('Sᴜᴘᴘᴏʀᴛ', url='https://variabletribe.com/support-us/'),
+                    InlineKeyboardButton('ᴀʙᴏᴜᴛ', url='https://variabletribe.com')
                 ]
                 # ,[
                 #     InlineKeyboardButton('Aᴜᴅɪᴏʙᴏᴏᴋs Cʜᴀɴɴᴇʟʟ', url=CHNL_LNK)
