@@ -1995,7 +1995,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
              [
                 # InlineKeyboardButton('ʜᴇʟᴘ', callback_data='help'),
                 InlineKeyboardButton('Sᴜᴘᴘᴏʀᴛ', url=f'https://t.me/{SUPPORT_CHAT}'),
-                InlineKeyboardButton('ᴀʙᴏᴜᴛ', url='https://variabletribe.com')
+                InlineKeyboardButton('ᴀʙᴏᴜᴛ', url='https://variabletribe.com/about-us/')
             ],
             [
                 # InlineKeyboardButton('ᴇᴀʀɴ ᴍᴏɴᴇʏ', callback_data="shortlink_info"),
@@ -2014,7 +2014,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
             [
                 # InlineKeyboardButton('ʜᴇʟᴘ', callback_data='help'),
                 InlineKeyboardButton('Sᴜᴘᴘᴏʀᴛ', url=f'https://t.me/{SUPPORT_CHAT}'),
-                InlineKeyboardButton('ᴀʙᴏᴜᴛ', url='https://variabletribe.com')
+                InlineKeyboardButton('ᴀʙᴏᴜᴛ', url='https://variabletribe.com/about-us/')
             ],
             # [
             #     InlineKeyboardButton('ᴇᴀʀɴ ᴍᴏɴᴇʏ', callback_data="shortlink_info"),
