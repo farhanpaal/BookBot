@@ -743,7 +743,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
     elif query.data == "help":
         text = "<b>👨‍💻 How To Use Bot :-\n\n🔻 /start - check bot is working or not.\n\n🔻 /stats - check bot files and users.\n\n🔻 /settings - configure clone bot settings ( owner only ).\n\n🔻 /reset - reset all settings to default or none ( owner only ).\n\n🔻 /broadcast - broadcast a message to your bot users ( owner only ).</b>"
         btn = [[
-            InlineKeyboardButton("🔍 ᴀʙᴏᴜᴛ", callback_data="about"),
+            InlineKeyboardButton("🔍 ᴀʙᴏᴜᴛ", url="https://variabletribe.com"),
             InlineKeyboardButton("🏡 ʜᴏᴍᴇ", callback_data="start")
         ]]
         await query.message.edit_text(text = text, reply_markup = InlineKeyboardMarkup(btn))
@@ -754,7 +754,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
         ],[
             # InlineKeyboardButton('🕵️ ʜᴇʟᴘ', callback_data='help'),
             InlineKeyboardButton('Sᴜᴘᴘᴏʀᴛ', url=f'https://t.me/{SUPPORT_CHAT}'),
-            InlineKeyboardButton('🔍 ᴀʙᴏᴜᴛ', callback_data='about')
+            InlineKeyboardButton('🔍 ᴀʙᴏᴜᴛ', url='https://variabletribe.com')
         ]]
         if settings["update_channel_link"] != None:
             buttons.append([[InlineKeyboardButton('🍿 Aᴜᴅɪᴏʙᴏᴏᴋs Cʜᴀɴɴᴇʟʟ 🍿', url=f'{settings["update_channel_link"]}')]])
@@ -763,8 +763,8 @@ async def cb_handler(client: Client, query: CallbackQuery):
 
     elif query.data == "about":
         btn = [[
-            # InlineKeyboardButton('🕵️ ʜᴇʟᴘ', callback_data='help'),
             InlineKeyboardButton('Sᴜᴘᴘᴏʀᴛ', url=f'https://t.me/{SUPPORT_CHAT}'),
+            InlineKeyboardButton('🌐 ᴠɪsɪᴛ ᴡᴇʙsɪᴛᴇ', url='https://variabletribe.com'),
             InlineKeyboardButton("🏡 ʜᴏᴍᴇ", callback_data="start")
         ]]
         await query.message.edit_text(text = script.CLONE_ABOUT_TXT.format(me.mention, temp.U_NAME, temp.B_NAME), reply_markup = InlineKeyboardMarkup(btn))
