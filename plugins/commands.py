@@ -76,7 +76,7 @@ async def start(client, message):
              [
                 InlineKeyboardButton('Sᴜᴘᴘᴏʀᴛ', url='https://variabletribe.com/support-us/'),
                 # InlineKeyboardButton('ʜᴇʟᴘ', callback_data='help'),
-                InlineKeyboardButton('ᴀʙᴏᴜᴛ', url='https://variabletribe.com')
+                InlineKeyboardButton('ᴀʙᴏᴜᴛ', url='https://variabletribe.com/about-us/')
             ],
             [
                 # InlineKeyboardButton('ᴇᴀʀɴ ᴍᴏɴᴇʏ', callback_data="shortlink_info"),
@@ -99,7 +99,7 @@ async def start(client, message):
             [
                 InlineKeyboardButton('Sᴜᴘᴘᴏʀᴛ', url='https://variabletribe.com/support-us/'),
                 # InlineKeyboardButton('ʜᴇʟᴘ', callback_data='help'),
-                InlineKeyboardButton('ᴀʙᴏᴜᴛ', url='https://variabletribe.com')
+                InlineKeyboardButton('ᴀʙᴏᴜᴛ', url='https://variabletribe.com/about-us/')
             ],
             # [
             #     InlineKeyboardButton('ᴇᴀʀɴ ᴍᴏɴᴇʏ', callback_data="shortlink_info"),
@@ -357,7 +357,7 @@ async def start(client, message):
              [
                 # InlineKeyboardButton('ʜᴇʟᴘ', callback_data='help'),
                 InlineKeyboardButton('Sᴜᴘᴘᴏʀᴛ', url='https://variabletribe.com/support-us/'),
-                InlineKeyboardButton('ᴀʙᴏᴜᴛ', url='https://variabletribe.com')
+                InlineKeyboardButton('ᴀʙᴏᴜᴛ', url='https://variabletribe.com/about-us/')
             ],
             [
                 # InlineKeyboardButton('ᴇᴀʀɴ ᴍᴏɴᴇʏ', callback_data="shortlink_info"),
@@ -379,12 +379,12 @@ async def start(client, message):
             [
                 InlineKeyboardButton('Sᴜᴘᴘᴏʀᴛ', url='https://variabletribe.com/support-us/'),
                 # InlineKeyboardButton('ʜᴇʟᴘ', callback_data='help'),
-                InlineKeyboardButton('ᴀʙᴏᴜᴛ', url='https://variabletribe.com')
+                InlineKeyboardButton('ᴀʙᴏᴜᴛ', url='https://variabletribe.com/about-us/')
             ],
-            [
-                InlineKeyboardButton('ᴇᴀʀɴ ᴍᴏɴᴇʏ', callback_data="shortlink_info"),
-                # InlineKeyboardButton('⤬ ᴀᴅᴅ ᴍᴇ ᴛᴏ ʏᴏᴜʀ ɢʀᴏᴜᴘ ⤬', url=f'http://t.me/{temp.U_NAME}?startgroup=true')
-            ]
+            # [
+            #     InlineKeyboardButton('ᴇᴀʀɴ ᴍᴏɴᴇʏ', callback_data="shortlink_info"),
+            #     InlineKeyboardButton('⤬ ᴀᴅᴅ ᴍᴇ ᴛᴏ ʏᴏᴜʀ ɢʀᴏᴜᴘ ⤬', url=f'http://t.me/{temp.U_NAME}?startgroup=true')
+            # ]
             ]
         if CLONE_MODE == True:
             buttons.append([InlineKeyboardButton('ᴄʀᴇᴀᴛᴇ ᴏᴡɴ ᴄʟᴏɴᴇ ʙᴏᴛ', callback_data='clone')])
@@ -427,7 +427,7 @@ async def start(client, message):
                 [
                     # InlineKeyboardButton('ʜᴇʟᴘ', callback_data='help'),
                     InlineKeyboardButton('Sᴜᴘᴘᴏʀᴛ', url='https://variabletribe.com/support-us/'),
-                    InlineKeyboardButton('ᴀʙᴏᴜᴛ', url='https://variabletribe.com')
+                    InlineKeyboardButton('ᴀʙᴏᴜᴛ', url='https://variabletribe.com/about-us/')
                 ],
                 [
                     # InlineKeyboardButton('ᴇᴀʀɴ ᴍᴏɴᴇʏ', callback_data="shortlink_info"),
@@ -449,7 +449,7 @@ async def start(client, message):
                 [
                     InlineKeyboardButton('Sᴜᴘᴘᴏʀᴛ', url='https://variabletribe.com/support-us/'),
                     # InlineKeyboardButton('ʜᴇʟᴘ', callback_data='help'),
-                    InlineKeyboardButton('ᴀʙᴏᴜᴛ', url='https://variabletribe.com')
+                    InlineKeyboardButton('ᴀʙᴏᴜᴛ', url='https://variabletribe.com/about-us/')
                 ],
                 # [
                 #     InlineKeyboardButton('ᴇᴀʀɴ ᴍᴏɴᴇʏ', callback_data="shortlink_info"),
