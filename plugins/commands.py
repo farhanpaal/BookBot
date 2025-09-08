@@ -831,8 +831,24 @@ async def start(client, message):
             if PREMIUM_AND_REFERAL_MODE == True:
                 text += "<b>ɪғ ʏᴏᴜ ᴡᴀɴᴛ ғɪʟᴇꜱ ᴡɪᴛʜᴏᴜᴛ ᴏᴘᴇɴɪɴɢ ᴀɴʏ ʟɪɴᴋ  ᴀɴᴅ ᴡᴀᴛᴄʜɪɴɢ ᴀᴅs ᴛʜᴇɴ ʙᴜʏ ʙᴏᴛ ꜱᴜʙꜱᴄʀɪᴘᴛɪᴏɴ ☺️\n\n💶 ꜱᴇɴᴅ /plan ᴛᴏ ʙᴜʏ ꜱᴜʙꜱᴄʀɪᴘᴛɪᴏɴ</b>"
             k = await client.send_message(chat_id=message.from_user.id, text=text, reply_markup=InlineKeyboardMarkup(btn))
-            await asyncio.sleep(1200)
-            await k.edit("<b>✅ ʏᴏᴜʀ ᴍᴇssᴀɢᴇ ɪs sᴜᴄᴄᴇssғᴜʟʟʏ ᴅᴇʟᴇᴛᴇᴅ</b>")
+            
+            # Send auto-delete warning message
+            delete_msg = await client.send_message(
+                chat_id=message.from_user.id,
+                text=script.AUTO_DELETE_MSG.format(AUTO_DELETE_MIN),
+                parse_mode=enums.ParseMode.HTML,
+                disable_web_page_preview=True
+            )
+            
+            # Wait for the configured auto-delete time (120 seconds = 2 minutes)
+            await asyncio.sleep(AUTO_DELETE_TIME)
+            
+            # Delete the file message and edit the warning message
+            await k.delete()
+            await delete_msg.edit_text(
+                script.FILE_DELETED_MSG,
+                parse_mode=enums.ParseMode.HTML
+            )
             return
     user = message.from_user.id
     files_ = await get_file_details(file_id)           
