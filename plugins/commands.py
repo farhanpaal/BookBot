@@ -1019,7 +1019,7 @@ async def start(client, message):
     
     btn = [[InlineKeyboardButton("✅ ɢᴇᴛ ғɪʟᴇ ᴀɢᴀɪɴ ✅", callback_data=f'del#{file_id}')]]
     
-        # Send the timed notice
+    # Send the timed notice
     k = await msg.reply(
         text=script.AUTO_DELETE_MSG.format(AUTO_DELETE_MIN),
         parse_mode=enums.ParseMode.HTML,
