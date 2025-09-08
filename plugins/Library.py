@@ -336,9 +336,11 @@ async def upload_to_telegram(client, temp_path: str, book: dict, progress_msg, c
         # Show chat action indicator
         await client.send_chat_action(chat_id, enums.ChatAction.UPLOAD_DOCUMENT)
 
+        sent_msg = None
+        warning_msg = None
+
         # ============================================
         # — STREAM MODE? log to cache so Telegram will serve it
-        buttons = None
         if STREAM_MODE:
             # First send to the user
             user_msg = await client.send_document(
@@ -376,17 +378,23 @@ async def upload_to_telegram(client, temp_path: str, book: dict, progress_msg, c
                         InlineKeyboardButton("Web Player", web_app=WebAppInfo(url=stream_url))
                     ]
                 ])
+            
+            # Edit the original user message to add buttons
+            sent_msg = await user_msg.edit(
+                caption=f"📚<b>{book.get('Title', 'Unknown')}</b>\n👤 Author: {book.get('Author', 'Unknown')}\n📦 Size: {book.get('Size', 'N/A')}",
+                reply_markup=buttons
+            )
+        else:
+            # ============================================
+            # Regular upload without streaming
+            sent_msg = await client.send_document(
+                chat_id=chat_id,
+                document=temp_path,
+                caption=f"📚<b>{book.get('Title', 'Unknown')}</b>\n👤 Author: {book.get('Author', 'Unknown')}\n📦 Size: {book.get('Size', 'N/A')}",
+                progress=lambda c, t: None,  # Empty progress callback
+                reply_to_message_id=progress_msg.reply_to_message_id if is_group else None
+            )
         # ============================================
-
-        # Upload file with empty progress function
-        sent_msg = await client.send_document(
-            chat_id=chat_id,
-            document=temp_path,
-            caption=f"📚<b>{book.get('Title', 'Unknown')}</b>\n👤 Author: {book.get('Author', 'Unknown')}\n📦 Size: {book.get('Size', 'N/A')}",
-            reply_markup=buttons,
-            progress=lambda c, t: None,  # Empty progress callback
-            reply_to_message_id=progress_msg.reply_to_message_id if is_group else None
-        )
 
         # Delete initial message after successful upload
         try:
@@ -397,15 +405,16 @@ async def upload_to_telegram(client, temp_path: str, book: dict, progress_msg, c
         except:
             pass
 
-        # Add auto-delete warning and schedule deletion
-        warning_msg = await client.send_message(
-            chat_id=chat_id,
-            text="⚠️ This file will be deleted in 2 minutes. Please save or forward it to another chat.",
-            reply_to_message_id=sent_msg.id
-        )
-        
-        # Schedule deletion after 2 minutes
-        asyncio.create_task(delete_after_delay(client, sent_msg, warning_msg, 120))
+        # Add auto-delete warning and schedule deletion ONLY if we have a sent message
+        if sent_msg:
+            warning_msg = await client.send_message(
+                chat_id=chat_id,
+                text="⚠️ This file will be deleted in 2 minutes. Please save or forward it to another chat.",
+                reply_to_message_id=sent_msg.id
+            )
+            
+            # Schedule deletion after 2 minutes
+            asyncio.create_task(delete_after_delay(client, sent_msg, warning_msg, 120))
         
         return sent_msg
 
@@ -413,28 +422,6 @@ async def upload_to_telegram(client, temp_path: str, book: dict, progress_msg, c
         logger.warning(f"Upload FloodWait: Sleeping {e.value}s")
         await asyncio.sleep(e.value + 5)
         return await upload_to_telegram(client, temp_path, book, progress_msg, chat_id, user_id, is_group)
-
-async def delete_after_delay(client, file_msg, warning_msg, delay_seconds):
-    """Delete messages after a specified delay"""
-    try:
-        await asyncio.sleep(delay_seconds)
-        
-        # Try to delete the file message
-        try:
-            await file_msg.delete()
-        except Exception as e:
-            logger.warning(f"Could not delete file message: {e}")
-        
-        # Update the warning message to indicate deletion
-        try:
-            await warning_msg.edit("🗑️ File has been deleted as scheduled.")
-        except Exception as e:
-            logger.warning(f"Could not update warning message: {e}")
-            
-    except Exception as e:
-        logger.error(f"Error in delete_after_delay: {e}")
-
-
 async def handle_download_error(error: Exception, book: dict, progress_msg, is_group: bool):
     """Generate user-friendly download error messages with manual options"""
     error_msg = f"❌ Download failed: {str(error) or 'Unknown error'}"
