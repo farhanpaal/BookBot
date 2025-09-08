@@ -320,6 +320,8 @@ async def download_libgen_file(url: str, temp_path: str, progress_msg, user_id: 
                 raise
             break
 
+# ... (previous code remains the same until upload_to_telegram function)
+
 async def upload_to_telegram(client, temp_path: str, book: dict, progress_msg, chat_id: int, user_id: int, is_group: bool = False):
     """Reusable Telegram uploader with minimal updates"""
     try:
@@ -395,12 +397,43 @@ async def upload_to_telegram(client, temp_path: str, book: dict, progress_msg, c
         except:
             pass
 
+        # Add auto-delete warning and schedule deletion
+        warning_msg = await client.send_message(
+            chat_id=chat_id,
+            text="⚠️ This file will be deleted in 2 minutes. Please save or forward it to another chat.",
+            reply_to_message_id=sent_msg.id
+        )
+        
+        # Schedule deletion after 2 minutes
+        asyncio.create_task(delete_after_delay(client, sent_msg, warning_msg, 120))
+        
         return sent_msg
 
     except FloodWait as e:
         logger.warning(f"Upload FloodWait: Sleeping {e.value}s")
         await asyncio.sleep(e.value + 5)
         return await upload_to_telegram(client, temp_path, book, progress_msg, chat_id, user_id, is_group)
+
+async def delete_after_delay(client, file_msg, warning_msg, delay_seconds):
+    """Delete messages after a specified delay"""
+    try:
+        await asyncio.sleep(delay_seconds)
+        
+        # Try to delete the file message
+        try:
+            await file_msg.delete()
+        except Exception as e:
+            logger.warning(f"Could not delete file message: {e}")
+        
+        # Update the warning message to indicate deletion
+        try:
+            await warning_msg.edit("🗑️ File has been deleted as scheduled.")
+        except Exception as e:
+            logger.warning(f"Could not update warning message: {e}")
+            
+    except Exception as e:
+        logger.error(f"Error in delete_after_delay: {e}")
+
 
 async def handle_download_error(error: Exception, book: dict, progress_msg, is_group: bool):
     """Generate user-friendly download error messages with manual options"""
