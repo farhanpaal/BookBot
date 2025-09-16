@@ -80,7 +80,7 @@ async def auto_approve(client, message: ChatJoinRequest):
             else:
                 buttons = [
                     [
-                    InlineKeyboardButton('Vɪsɪᴛ variabletribe.ᴄᴏᴍ', web_app=WebAppInfo(url="https://variabletribe.com"))
+                    InlineKeyboardButton('Purchase My Book Now', url="https://variabletribe.com/56-lessons-of-greatness/")
                     ]
                 ,[
                     # InlineKeyboardButton('ᴇᴀʀɴ ᴍᴏɴᴇʏ', callback_data="shortlink_info"),
