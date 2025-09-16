@@ -65,9 +65,9 @@ async def auto_approve(client, message: ChatJoinRequest):
             if PREMIUM_AND_REFERAL_MODE == True:
                 buttons = [
                     [
-                    InlineKeyboardButton('Vɪsɪᴛ variabletribe.ᴄᴏᴍ', web_app=WebAppInfo(url="https://variabletribe.com"))
+                    InlineKeyboardButton('Support Us by buying our book', web_app=WebAppInfo(url="https://variabletribe.com/56-lessons-of-greatness/"))
                     ],
-                [
+                [    
                     InlineKeyboardButton('Aᴜᴅɪᴏʙᴏᴏᴋs Cʜᴀɴɴᴇʟ', url=CHNL_LNK),
                     InlineKeyboardButton('ʙᴏᴏᴋs Cʜᴀɴɴᴇʟ', url=GRP_LNK)
                 ],[
