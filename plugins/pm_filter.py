@@ -1995,7 +1995,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
              [
                 # InlineKeyboardButton('ʜᴇʟᴘ', callback_data='help'),
                 InlineKeyboardButton('Sᴜᴘᴘᴏʀᴛ', url=f'https://t.me/{SUPPORT_CHAT}'),
-                InlineKeyboardButton('ᴀʙᴏᴜᴛ', url='https://variabletribe.com/about-us/')
+                InlineKeyboardButton('Buy our book to support us', url='https://variabletribe.com/56-lessons-of-greatness/')
             ],
             [
                 # InlineKeyboardButton('ᴇᴀʀɴ ᴍᴏɴᴇʏ', callback_data="shortlink_info"),
