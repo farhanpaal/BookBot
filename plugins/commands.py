@@ -41,7 +41,7 @@ async def start(client, message):
         # ],
 
         [
-            InlineKeyboardButton('Vɪsɪᴛ variabletribe.ᴄᴏᴍ', web_app=WebAppInfo(url="https://variabletribe.com"))
+            InlineKeyboardButton('Buy our book to support us', url='https://variabletribe.com/56-lessons-of-greatness/')
         ],
         [
             InlineKeyboardButton('sᴜᴘᴘᴏʀᴛ ɢʀᴏᴜᴘ', url=f'https://t.me/{SUPPORT_CHAT}'),
@@ -74,9 +74,9 @@ async def start(client, message):
                 InlineKeyboardButton('Books Channel', url=GRP_LNK)
             ],
              [
-                InlineKeyboardButton('Sᴜᴘᴘᴏʀᴛ', url='https://variabletribe.com/support-us/'),
+                InlineKeyboardButton('Buy our book to support us', url='https://variabletribe.com/56-lessons-of-greatness/'),
                 # InlineKeyboardButton('ʜᴇʟᴘ', callback_data='help'),
-                InlineKeyboardButton('ᴀʙᴏᴜᴛ', url='https://variabletribe.com/about-us/')
+                InlineKeyboardButton('Buy our book to support us', url='https://variabletribe.com/56-lessons-of-greatness/')
             ],
             [
                 # InlineKeyboardButton('ᴇᴀʀɴ ᴍᴏɴᴇʏ', callback_data="shortlink_info"),
