@@ -20,14 +20,15 @@ hachoir
 python-decouple 
 ffmpeg
 youtube_search
-pymongo[srv]>=4.5,<5.0  # Updated for motor compatibility
-motor>=3.3.0  # Updated for Python 3.13 compatibility
+pymongo[srv]==3.12.3
+motor==2.5.1
 marshmallow==3.14.1 
 umongo==3.0.1 
 PyLeaves==1.0.2
 youtube-search-python==1.4.6
 opencv-python-headless==4.7.0.68 
-googletrans==3.1.0a0 
+# Replace googletrans with a maintained fork
+googletrans-py>=1.1.5
 python-dotenv==0.21.1 
 gTTS==2.3.1 
 speedtest==0.0.1 
